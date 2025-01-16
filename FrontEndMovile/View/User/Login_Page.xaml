@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FrontEndMovile.View.User.Login_Page"
+             Title="LoginPage">
+    <VerticalStackLayout 
+        VerticalOptions="Center"
+        Margin="20,0,20,0"
+        Spacing="20"
+        >
+        <Image  Source="dotnet_bot"
+                HorizontalOptions="Center"
+                HeightRequest="80"
+                WidthRequest="80"
+                />
+        <Label
+            Text="Welcome to my first MAUI application"
+            TextColor="Black"
+            FontSize="Large"
+            HorizontalOptions="Center"
+            />
+        <Label
+            Text="Ingrese sus credenciales para iniciar el uso del app"
+            TextColor="LightSlateGray"
+            FontSize="Small"
+            HorizontalOptions="Center"
+            />
+        <Entry
+            Text="{Binding Email}"
+            Placeholder="Email"
+            />
+        <Entry
+            Text="{Binding Password}"
+            Placeholder="Password"
+            IsPassword="True"
+            />
+        <Button
+            Text="Iniciar Sesion"
+            HeightRequest="50"
+            FontSize="Medium"
+            BackgroundColor="#1d94ab"
+            Command="{Binding Command_LoginMethodCommand}"
+            />
+    </VerticalStackLayout>
+</ContentPage>
