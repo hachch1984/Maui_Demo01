@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FrontEndMovile.View.User.Login_Page"
              xmlns:util="clr-namespace:FrontEndMovile.Util"
+             xmlns:component="clr-namespace:FrontEndMovile.Util.GeneralComponent"   
             
              Title="LoginPage">
 
@@ -18,40 +19,42 @@
                 HorizontalOptions="Center"
                 HeightRequest="80"
                 WidthRequest="120"
-                Margin="0,0,0,100"
+                Margin="0,0,0,50"
                 />
 
 
+        <Label 
+            Text="Iniciar sesión" 
+            FontSize="Title" 
+            HorizontalOptions="Start" 
+            Margin="0,0,0,10"  
+            />
 
 
-        <Label
-             Text="Tipo de documento de identidad"
-            FontSize="Body"
-             TextColor="{DynamicResource PrimaryDarkText}"
-             HorizontalOptions="Start"
+        <VerticalStackLayout Margin="10,0,0,0">
+            <Label
+            Text="Documento de identidad"
+            FontSize="Default"
+            TextColor="{DynamicResource PrimaryDarkText}"
+            HorizontalOptions="Start"
          />
-        <Picker
+            <Picker
             FontSize="Body"
             Title="Seleccione una opción"
-            TextColor="{DynamicResource PrimaryDark}"            
+            TextColor="{DynamicResource PrimaryDarkText}"            
             ItemsSource="{Binding UserDocumentType_List}"
             ItemDisplayBinding="{Binding Name}"
             SelectedItem="{Binding UserDocumentTypeId}  "
-            Margin="10,0,0,10"
-           
+            Margin="10,0,0,10"           
             />
-        <Label
-            Text="{Binding UserDocumentTypeId_Error}"
-            FontSize="Small"
-            HorizontalOptions="End"
-            TextColor="{DynamicResource  Danger}"
-            IsVisible="{Binding UserDocumentTypeId_Error, Converter={util:NullOrEmptyToBooleanConverter }}"
-            Margin="10,0,0,0"
-        />
+            <component:Label_Error_Component
+            x:Name="UserDocumentTypeId_Error"
+            Text="{Binding UserDocumentTypeId_Error}"          
+            />
+        </VerticalStackLayout>
 
 
-
-        <Label
+        <!--<Label
             Text="Numero de Documento de identidad"
             TextColor="{DynamicResource PrimaryDarkText}"
             HorizontalOptions="Start"
@@ -61,40 +64,47 @@
             TextColor="{DynamicResource PrimaryDark}"
             Placeholder="Ingrese su numero de documento de identidad"
             Margin="10,0,0,10"
+            />     
+        <component:Label_Error_Component
+            x:Name="UserDocumentValue_Error"
+            Text="{Binding UserDocumentValue_Error}"         
+            />-->
+        <component:Group_Label_Entry_LabelError_Component
+            LabelText="Numero de Documento de identidad"
+            EntryBinding="{Binding UserDocumentValue}"
+            EntryPlaceholder="Ingrese su numero de documento de identidad"
+            ErrorBinding="{Binding UserDocumentValue_Error}"
+            Margin="10,0,0,0"
             />
-        <Label
-             Text="{Binding UserDocumentValue_Error}"
-               TextColor="{DynamicResource  Danger}"
-             FontSize="Small"
-             HorizontalOptions="End"
-             IsVisible="{Binding UserDocumentValue_Error, Converter={util:NullOrEmptyToBooleanConverter }}"
-            Margin="10,0,0,10"
-         />
 
 
-
-        <Label
+        <!--<VerticalStackLayout Margin="10,0,0,0">
+            <Label
              Text="Contraseña"
              TextColor="{DynamicResource PrimaryDarkText}"             
              HorizontalOptions="Start"
          />
-        <Entry
+            <Entry
             Text="{Binding Password}"
             TextColor="{DynamicResource PrimaryDark}"
             Placeholder="Ingrese su contraseña"
             IsPassword="True"
-           Margin="10,0,0,10"
+            Margin="10,0,0,10"
             />
-        <Label
-             Text="{Binding Password_Error}"
-              TextColor="{DynamicResource  Danger}"
-             FontSize="Small"
-             HorizontalOptions="End"
-             IsVisible="{Binding Password_Error, Converter={util:NullOrEmptyToBooleanConverter }}"
+            <component:Label_Error_Component
+            x:Name="Password_Error"
+            Text="{Binding Password_Error}"          
+            />
+        </VerticalStackLayout>-->
+        <component:Group_Label_Entry_LabelError_Component
+            LabelText="Contraseña"
+            EntryBinding="{Binding Password}"
+            EntryPlaceholder="Ingrese su contraseña"
+            EntryIsPassword="True"
+            ErrorBinding="{Binding Password_Error}"
             Margin="10,0,0,0"
-         />
-
-
+            
+            />
 
 
         <Button
@@ -103,8 +113,11 @@
             FontSize="Medium"
             BackgroundColor="{DynamicResource Primary}"
             Command="{Binding Command_LoginMethodCommand}"
-            Margin="0,50,0,100"
+            Margin="0,50,0,50"
             />
+
+
+
 
 
         <Label

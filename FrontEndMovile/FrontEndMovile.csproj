@@ -21,7 +21,7 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>FrontEndMovile</ApplicationTitle>
+		<ApplicationTitle>CEP Nuestra Señora del Perpetuo Socorro - Trujillo</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.frontendmovile</ApplicationId>
@@ -43,10 +43,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#152056" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="555,555" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#152056" BaseSize="800,800" />
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
@@ -80,12 +80,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Util\GeneralComponent\Group_Label_Entry_LabelError_Component.xaml.cs">
+	    <DependentUpon>Group_Label_Entry_LabelError_Component.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Util\GeneralComponent\Label_Error_Component.xaml.cs">
+	    <DependentUpon>Label_Error_Component.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\User\Login_Page.xaml.cs">
 	    <DependentUpon>Login_Page.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Util\GeneralComponent\Group_Label_Entry_LabelError_Component.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Util\GeneralComponent\Label_Error_Component.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\NotificationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

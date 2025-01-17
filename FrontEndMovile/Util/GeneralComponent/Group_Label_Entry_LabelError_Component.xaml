@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FrontEndMovile.Util.GeneralComponent.Group_Label_Entry_LabelError_Component"
+             xmlns:local="clr-namespace:FrontEndMovile.Util.GeneralComponent">
+
+    <VerticalStackLayout Spacing="5">
+        
+        <!-- Label Descriptivo -->
+        <Label 
+            Text="{Binding LabelText, Source={RelativeSource AncestorType={x:Type local:Group_Label_Entry_LabelError_Component}}}"
+            FontSize="Default"
+            HorizontalOptions="Start" 
+            TextColor="{DynamicResource PrimaryDarkText}"
+               />
+
+        <!-- Entry para capturar datos -->
+        <Entry 
+            Text="{Binding EntryBinding, Source={RelativeSource AncestorType={x:Type local:Group_Label_Entry_LabelError_Component}}}"
+            FontSize="Body"
+            TextColor="{DynamicResource PrimaryDarkText}"
+            Placeholder="{Binding EntryPlaceholder, Source={RelativeSource AncestorType={x:Type local:Group_Label_Entry_LabelError_Component}}}"
+            IsPassword="{Binding EntryIsPassword , Source={RelativeSource AncestorType={x:Type local:Group_Label_Entry_LabelError_Component}}  }"
+            Keyboard="{Binding EntryKeyboard, Source={RelativeSource AncestorType={x:Type local:Group_Label_Entry_LabelError_Component}}  }"
+            Margin="5,0,0,0"
+               />
+
+        <!-- Label_Error_Component para errores,  -->
+        <local:Label_Error_Component 
+            Text="{Binding ErrorBinding, Source={RelativeSource AncestorType={x:Type local:Group_Label_Entry_LabelError_Component}}}" 
+            />
+        
+    </VerticalStackLayout>
+</ContentView>
