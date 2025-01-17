@@ -2,44 +2,116 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FrontEndMovile.View.User.Login_Page"
+             xmlns:util="clr-namespace:FrontEndMovile.Util"
+            
              Title="LoginPage">
+
+
     <VerticalStackLayout 
         VerticalOptions="Center"
-        Margin="20,0,20,0"
-        Spacing="20"
+        Margin="50,0,50,0"
+        Spacing="5"
         >
-        <Image  Source="dotnet_bot"
+
+
+        <Image  Source="logo01"
                 HorizontalOptions="Center"
                 HeightRequest="80"
-                WidthRequest="80"
+                WidthRequest="120"
+                Margin="0,0,0,100"
                 />
+
+
+
+
         <Label
-            Text="Welcome to my first MAUI application"
-            TextColor="Black"
-            FontSize="Large"
-            HorizontalOptions="Center"
+             Text="Tipo de documento de identidad"
+            FontSize="Body"
+             TextColor="{DynamicResource PrimaryDarkText}"
+             HorizontalOptions="Start"
+         />
+        <Picker
+            FontSize="Body"
+            Title="Seleccione una opción"
+            TextColor="{DynamicResource PrimaryDark}"            
+            ItemsSource="{Binding UserDocumentType_List}"
+            ItemDisplayBinding="{Binding Name}"
+            SelectedItem="{Binding UserDocumentTypeId}  "
+            Margin="10,0,0,10"
+           
             />
         <Label
-            Text="Ingrese sus credenciales para iniciar el uso del app"
-            TextColor="LightSlateGray"
+            Text="{Binding UserDocumentTypeId_Error}"
             FontSize="Small"
-            HorizontalOptions="Center"
+            HorizontalOptions="End"
+            TextColor="{DynamicResource  Danger}"
+            IsVisible="{Binding UserDocumentTypeId_Error, Converter={util:NullOrEmptyToBooleanConverter }}"
+            Margin="10,0,0,0"
+        />
+
+
+
+        <Label
+            Text="Numero de Documento de identidad"
+            TextColor="{DynamicResource PrimaryDarkText}"
+            HorizontalOptions="Start"
             />
         <Entry
-            Text="{Binding Email}"
-            Placeholder="Email"
+            Text="{Binding UserDocumentValue}"
+            TextColor="{DynamicResource PrimaryDark}"
+            Placeholder="Ingrese su numero de documento de identidad"
+            Margin="10,0,0,10"
             />
+        <Label
+             Text="{Binding UserDocumentValue_Error}"
+               TextColor="{DynamicResource  Danger}"
+             FontSize="Small"
+             HorizontalOptions="End"
+             IsVisible="{Binding UserDocumentValue_Error, Converter={util:NullOrEmptyToBooleanConverter }}"
+            Margin="10,0,0,10"
+         />
+
+
+
+        <Label
+             Text="Contraseña"
+             TextColor="{DynamicResource PrimaryDarkText}"             
+             HorizontalOptions="Start"
+         />
         <Entry
             Text="{Binding Password}"
-            Placeholder="Password"
+            TextColor="{DynamicResource PrimaryDark}"
+            Placeholder="Ingrese su contraseña"
             IsPassword="True"
+           Margin="10,0,0,10"
             />
+        <Label
+             Text="{Binding Password_Error}"
+              TextColor="{DynamicResource  Danger}"
+             FontSize="Small"
+             HorizontalOptions="End"
+             IsVisible="{Binding Password_Error, Converter={util:NullOrEmptyToBooleanConverter }}"
+            Margin="10,0,0,0"
+         />
+
+
+
+
         <Button
-            Text="Iniciar Sesion"
+            Text="Ingresar"
             HeightRequest="50"
             FontSize="Medium"
-            BackgroundColor="#1d94ab"
+            BackgroundColor="{DynamicResource Primary}"
             Command="{Binding Command_LoginMethodCommand}"
+            Margin="0,50,0,100"
             />
+
+
+        <Label
+            Text="Olvido su Contraseña"
+            TextColor="{DynamicResource Secondary}"
+            HorizontalOptions="Center"
+            />
+
     </VerticalStackLayout>
 </ContentPage>
