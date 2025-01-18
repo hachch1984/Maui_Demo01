@@ -21,7 +21,7 @@ namespace Ges.Category
 
         public class Validator : AbstractValidator<GetById>
         {
-            public Validator()
+            public Validator(ApplicationDbContext dbContext)
             {
                 RuleFor(x => x)
                     .Custom((value, context) =>
@@ -31,6 +31,10 @@ namespace Ges.Category
                         if (id <= 0)
                         {
                             context.AddFailure(nameof(context.InstanceToValidate.Id), "The name must be greater than 0");
+                        }
+                        else if (!dbContext.Category.Any(x => x.Id == id))
+                        {
+                            context.AddFailure(nameof(context.InstanceToValidate.Id), "Not exist");
                         }
                     });
 

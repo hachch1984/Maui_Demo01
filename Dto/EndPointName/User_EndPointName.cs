@@ -10,5 +10,8 @@
         public static string GetById => "/GetById";
         public static string GetAll => "/GetAll";
 
+
+        public static string PasswordRestore => "/passwordRestore";
+
     }
 }

@@ -1,6 +1,3 @@
-
-using Microsoft.Maui.Controls;
-
 namespace FrontEndMovile.Util.GeneralComponent
 {
     public partial class Group_Label_Entry_LabelError_Component : ContentView
@@ -27,6 +24,14 @@ namespace FrontEndMovile.Util.GeneralComponent
 
 
         #region Entry
+        /// <summary>
+        /// Limpia el texto del Entry
+        /// </summary>
+        public void EntryClearText()
+        {
+            EntryBinding = string.Empty;
+        }
+
 
         // EntryBinding (Texto capturado por el Entry)
         public static readonly BindableProperty EntryBindingProperty =
@@ -83,6 +88,7 @@ namespace FrontEndMovile.Util.GeneralComponent
             get => (string)GetValue(ErrorBindingProperty);
             set => SetValue(ErrorBindingProperty, value);
         }
+        
         #endregion
 
     }

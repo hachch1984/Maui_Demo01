@@ -25,8 +25,43 @@ namespace BackendApi.EndPoint
                     return x;
                 });
 
+
+            endpoints.MapPost(User_EndPointName.PasswordRestore, PasswordRestore);
+
             return endpoints;
         }
+
+
+
+
+        private static async Task<Results<InternalServerError<string>, Ok, NotFound, BadRequest<Dictionary<string, string[]>>>> PasswordRestore(
+        User_Dto_For_PasswordRestore dto,
+
+        IMediator mediator,
+        CancellationToken cancellationToken = default
+    )
+        {
+            try
+            {
+                var cmd = new Ges.User.PasswordRestore(dto);
+
+                await mediator.Send(cmd, cancellationToken);
+
+                if (cmd.HasErrors)
+                {
+                    return TypedResults.BadRequest(cmd.Errors);
+                }
+                            
+
+                return TypedResults.Ok();
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.InternalServerError(ex.Message);
+            }
+
+        }
+
 
         //-----------------------------------------------------------------------------------------------------
 

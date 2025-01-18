@@ -27,6 +27,9 @@ namespace Dto
         public string Password { get; set; }
     }
 
-
+    public class User_Dto_For_PasswordRestore
+    {
+        public string Email { get; set; }
+    }
 
 }

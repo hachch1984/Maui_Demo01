@@ -2,6 +2,7 @@
 using Dto.EndPointName;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Model.Util;
 
 namespace BackendApi.EndPoint
 {
@@ -11,7 +12,7 @@ namespace BackendApi.EndPoint
         public static RouteGroupBuilder Product_EndPoint_Map(this RouteGroupBuilder endpoints)
         {
             endpoints.MapGet(Product_EndPointName.GetById, GetById);
-            endpoints.MapGet(Product_EndPointName.GetAll, GetAll);
+            endpoints.MapGet(Product_EndPointName.GetAll, GetAll).RequireAuthorization(Authorization_CustomPolicy.IsUser);
             endpoints.MapGet(Product_EndPointName.GetByCategoryId, GetByCategoryId);
             endpoints.MapGet(Product_EndPointName.GetByName, GetByName);
 

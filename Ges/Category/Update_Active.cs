@@ -74,6 +74,7 @@ namespace Ges.Category
                         .Where(x => x.Id == obj.Id)
                         .ExecuteUpdateAsync(x => 
                             x.SetProperty(y => y.Active, obj.Active)
+                            
                             , cancellationToken);
 
                     await dbContext.SaveChangesAsync(cancellationToken);

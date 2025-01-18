@@ -1,29 +1,23 @@
-﻿using FrontEndMovile.Util;
+﻿using Dto;
+using FrontEndMovile.Util;
 
 namespace FrontEndMovile
 {
     public partial class MainPage : ContentPage
     {
-        private readonly ISetting setting;
-        int count = 0;
+       
 
         public MainPage(ISetting setting)
         {
             InitializeComponent();
-            this.setting = setting;
+       
+
+            var name= Preferences.Get(nameof(Token_Dto_For_ShowInformation.Name), string.Empty);    
+
+            this.LblWellcome.Text = $"Bienvenido usuario {name.ToUpper()} al demo de la futura aplicacion movil desarrollada en MAUI para el colegio";
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
-        {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time ";
-            else
-                CounterBtn.Text = $"Clicked {count} times "+this.setting.BackendApiUrl;
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
-        }
+     
     }
 
 }

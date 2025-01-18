@@ -19,7 +19,7 @@ namespace BackendApi
 
             app.MapGroup(Category_EndPointName.EndPointName).Category_EndPoint_Map();
 
-            app.MapGroup(Product_EndPointName.EndPointName).Product_EndPoint_Map();//.RequireAuthorization();
+            app.MapGroup(Product_EndPointName.EndPointName).Product_EndPoint_Map().RequireAuthorization();
 
 
 

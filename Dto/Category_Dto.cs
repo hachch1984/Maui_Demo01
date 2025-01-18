@@ -24,6 +24,7 @@ namespace Dto
         public int Id { get; set; }
         public string Name { get; set; }
     }
+
     /// <summary>
     /// Id, Name, Description
     /// </summary>

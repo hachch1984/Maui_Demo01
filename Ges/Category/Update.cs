@@ -87,7 +87,7 @@ namespace Ges.Category
 
                     var obj = this.mapper.Map<Model.Category>(request.Dto);
 
-                   dbContext.Category.Update(obj);
+                    dbContext.Category.Update(obj);
 
                     var rowCount = await dbContext.SaveChangesAsync(cancellationToken);
                                        

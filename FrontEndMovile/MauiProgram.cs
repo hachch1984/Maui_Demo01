@@ -74,6 +74,10 @@ namespace FrontEndMovile
             builder.Services.AddTransient<Login_Page>();
             builder.Services.AddTransient<Login_ViewModel>();
 
+
+            builder.Services.AddTransient<PasswordRestore_Page>();
+            builder.Services.AddTransient<PasswordRestore_ViewModel>();
+
             #endregion
 
 

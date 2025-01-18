@@ -45,7 +45,8 @@
             ItemsSource="{Binding UserDocumentType_List}"
             ItemDisplayBinding="{Binding Name}"
             SelectedItem="{Binding UserDocumentTypeId}  "
-            Margin="10,0,0,10"           
+            Margin="10,0,0,10"    
+                x:Name="CmbDocument"
             />
             <component:Label_Error_Component
             x:Name="UserDocumentTypeId_Error"
@@ -75,6 +76,7 @@
             EntryPlaceholder="Ingrese su numero de documento de identidad"
             ErrorBinding="{Binding UserDocumentValue_Error}"
             Margin="10,0,0,0"
+            x:Name="TxtDocumentoIdentidad"
             />
 
 
@@ -103,7 +105,7 @@
             EntryIsPassword="True"
             ErrorBinding="{Binding Password_Error}"
             Margin="10,0,0,0"
-            
+            x:Name="TxtPassword"
             />
 
 
@@ -124,6 +126,7 @@
             Text="Olvido su Contraseña"
             TextColor="{DynamicResource Secondary}"
             HorizontalOptions="Center"
+           x:Name="ForgotPassword"
             />
 
     </VerticalStackLayout>

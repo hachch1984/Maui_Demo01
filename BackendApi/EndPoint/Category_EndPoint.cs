@@ -21,7 +21,16 @@ namespace BackendApi.EndPoint
             return endpoints;
         }
 
-        public static async Task<Results<Ok<Category_Dto_For_ShowInformation03>, BadRequest<Dictionary<string, string[]>>, NotFound, InternalServerError<string>>> GetById(
+        public static async 
+            Task<
+            Results<
+                Ok<Category_Dto_For_ShowInformation03>,
+                BadRequest<Dictionary<string, string[]>>, 
+                NotFound, 
+                InternalServerError<string>
+                >
+            > GetById(
+
             int id,
 
             IMediator mediator,
@@ -63,7 +72,12 @@ namespace BackendApi.EndPoint
             }
         }
 
-        public static async Task<Results<Created<int>, BadRequest<Dictionary<string, string[]>>, InternalServerError<string>>> Add(
+        public static async Task<
+            Results<
+                Created<int>, 
+                BadRequest<Dictionary<string, string[]>>,
+                InternalServerError<string>
+                >> Add(
             Category_Dto_For_Add dto,
 
             IMediator mediator,
