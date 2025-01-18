@@ -5,6 +5,7 @@ using FluentValidation;
 using Ges;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -19,6 +20,7 @@ namespace BackendApi
     {
         public static void Configure(WebApplicationBuilder builder)
         {
+          
 
             //json, configuracion de ignore cycles
             builder.Services.Configure<JsonOptions>(options =>
@@ -143,6 +145,11 @@ namespace BackendApi
 
             builder.Services.AddHostedService<NotificationBackground_Service>();
 
+
+
+
+            //configuracion de output cache
+            builder.Services.AddOutputCache();
 
         }
     }

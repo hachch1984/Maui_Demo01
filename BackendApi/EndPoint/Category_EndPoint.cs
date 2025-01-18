@@ -2,16 +2,49 @@
 using Dto.EndPointName;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace BackendApi.EndPoint
 {
     public static class Category_EndPoint
     {
-      
+
+        #region cache
+
+        /// <summary>
+        /// identificador del cache GetAll
+        /// </summary>
+        static readonly string Cache_GetAll = "39018177-7104-49b0-b089-5e482613b53d";
+        /// <summary>
+        /// identificador del cache GetById
+        /// </summary>
+        static readonly string Cache_GetById = "f3b3b3b3-3b3b-4b3b-8b3b-3b3b3b3b3b3b";
+        /// <summary>
+        /// funcion para refrescar el cache de: GetAll y GetById
+        /// </summary>
+        /// <param name="outputCacheStore"></param>
+        /// <returns></returns>
+        private static async Task Cache_Refresh(IOutputCacheStore outputCacheStore)
+        {
+            await outputCacheStore.EvictByTagAsync(Cache_GetAll, default);
+            await outputCacheStore.EvictByTagAsync(Cache_GetById, default);
+        }
+
+        #endregion
+
+
+
         public static RouteGroupBuilder Category_EndPoint_Map(this RouteGroupBuilder endpoints)
         {
-            endpoints.MapGet(Category_EndPointName.GetById, GetById);
-            endpoints.MapGet(Category_EndPointName.GetAll, GetAll);
+            endpoints.MapGet(Category_EndPointName.GetById, GetById)
+                .CacheOutput(
+                    x => x.Expire(TimeSpan.FromDays(1)).Tag(Cache_GetById)
+                );
+
+            endpoints.MapGet(Category_EndPointName.GetAll, GetAll)
+                .CacheOutput(
+                    x => x.Expire(TimeSpan.FromDays(1)).Tag(Cache_GetAll)
+                );
 
             endpoints.MapPost(Category_EndPointName.Add, Add);
             endpoints.MapPut(Category_EndPointName.Update, Update);
@@ -20,6 +53,12 @@ namespace BackendApi.EndPoint
 
             return endpoints;
         }
+
+
+      
+
+
+
 
         public static async 
             Task<
@@ -80,6 +119,7 @@ namespace BackendApi.EndPoint
                 >> Add(
             Category_Dto_For_Add dto,
 
+            IOutputCacheStore outputCacheStore,
             IMediator mediator,
             CancellationToken cancellationToken = default
             )
@@ -92,6 +132,9 @@ namespace BackendApi.EndPoint
                 {
                     return TypedResults.BadRequest(cmd.Errors);
                 }
+
+
+                await Cache_Refresh(outputCacheStore);//refresh cache
 
                 var url = $"{Category_EndPointName.EndPointName}{Category_EndPointName.GetById}?id={cmd.Result.Id}";
 
@@ -108,6 +151,7 @@ namespace BackendApi.EndPoint
         public static async Task<Results<Ok, BadRequest<Dictionary<string, string[]>>, InternalServerError<string>>> Update(
             Category_Dto_For_Update dto,
 
+            IOutputCacheStore outputCacheStore,
             IMediator mediator,
             CancellationToken cancellationToken = default
             )
@@ -120,6 +164,9 @@ namespace BackendApi.EndPoint
                 {
                     return TypedResults.BadRequest(cmd.Errors);
                 }
+
+                await Cache_Refresh(outputCacheStore);//refresh cache
+
                 return TypedResults.Ok();
             }
             catch (Exception ex)
@@ -131,6 +178,7 @@ namespace BackendApi.EndPoint
         Category_Dto_For_Update_Active dto,
 
         IMediator mediator,
+        IOutputCacheStore outputCacheStore,
         CancellationToken cancellationToken = default
         )
         {
@@ -142,6 +190,9 @@ namespace BackendApi.EndPoint
                 {
                     return TypedResults.BadRequest(cmd.Errors);
                 }
+
+                await Cache_Refresh(outputCacheStore);//refresh cache
+
                 return TypedResults.Ok();
             }
             catch (Exception ex)
@@ -157,6 +208,7 @@ namespace BackendApi.EndPoint
             int id,
 
             IMediator mediator,
+            IOutputCacheStore   outputCacheStore,
             CancellationToken cancellationToken = default
             )
         {
@@ -168,6 +220,8 @@ namespace BackendApi.EndPoint
                 {
                     return TypedResults.BadRequest(cmd.Errors);
                 }
+
+                await Cache_Refresh(outputCacheStore);//refresh cache
 
                 return TypedResults.Ok();
             }
