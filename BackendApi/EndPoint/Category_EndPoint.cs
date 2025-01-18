@@ -24,10 +24,10 @@ namespace BackendApi.EndPoint
         /// </summary>
         /// <param name="outputCacheStore"></param>
         /// <returns></returns>
-        private static async Task Cache_Refresh(IOutputCacheStore outputCacheStore)
+        private static async Task Cache_Refresh(IOutputCacheStore outputCacheStore, CancellationToken cancellationToken)
         {
-            await outputCacheStore.EvictByTagAsync(Cache_GetAll, default);
-            await outputCacheStore.EvictByTagAsync(Cache_GetById, default);
+            await outputCacheStore.EvictByTagAsync(Cache_GetAll, cancellationToken);
+            await outputCacheStore.EvictByTagAsync(Cache_GetById, cancellationToken);
         }
 
         #endregion
@@ -134,7 +134,7 @@ namespace BackendApi.EndPoint
                 }
 
 
-                await Cache_Refresh(outputCacheStore);//refresh cache
+                await Cache_Refresh(outputCacheStore,cancellationToken);//refresh cache
 
                 var url = $"{Category_EndPointName.EndPointName}{Category_EndPointName.GetById}?id={cmd.Result.Id}";
 
@@ -165,7 +165,7 @@ namespace BackendApi.EndPoint
                     return TypedResults.BadRequest(cmd.Errors);
                 }
 
-                await Cache_Refresh(outputCacheStore);//refresh cache
+                await Cache_Refresh(outputCacheStore, cancellationToken);//refresh cache
 
                 return TypedResults.Ok();
             }
@@ -191,7 +191,7 @@ namespace BackendApi.EndPoint
                     return TypedResults.BadRequest(cmd.Errors);
                 }
 
-                await Cache_Refresh(outputCacheStore);//refresh cache
+                await Cache_Refresh(outputCacheStore, cancellationToken);//refresh cache
 
                 return TypedResults.Ok();
             }
@@ -221,7 +221,7 @@ namespace BackendApi.EndPoint
                     return TypedResults.BadRequest(cmd.Errors);
                 }
 
-                await Cache_Refresh(outputCacheStore);//refresh cache
+                await Cache_Refresh(outputCacheStore,cancellationToken);//refresh cache
 
                 return TypedResults.Ok();
             }
