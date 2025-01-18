@@ -151,6 +151,8 @@ namespace FrontEndMovile.ViewModel
             {
 
                 var url = $"{this.setting.BackendApiUrl}{UserDocumentType_EndPointName.EndPointName}{UserDocumentType_EndPointName.GetAllOnlyActive}";
+
+
                 var response = await this.httpClient.GetFromJsonAsync<List<UserDocumentType_Dto_For_OnlyActives>>(url);
 
                 if (response is not null)
