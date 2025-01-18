@@ -4,18 +4,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 
-// Configurar servicios
+//01 - Configurar servicios
 Program_Service.Configure(builder);
 
 var app = builder.Build();
 
-// Configurar middleware 
+//02 - Configurar middleware 
 Program_Middleware.Configure(builder, app);
 
  
 //app.UseHttpsRedirection(); // Redirección HTTPS si es necesario
 
-// Configurar enpoints 
+//03 - Configurar enpoints 
 Program_EndPoint.Configure(builder, app);
 
 
