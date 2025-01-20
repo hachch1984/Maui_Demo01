@@ -5,48 +5,66 @@ using Microsoft.AspNetCore.SignalR.Client;
 namespace FrontEndMovile.Service.SignalR
 {
 
-    public class Notification_ServiceSignalR
+    public interface INotification_ServiceSignalR
     {
-        private readonly HubConnection hubConnection;
+        Task StartConnectionAsync(string userId, CancellationToken cancellationToken = default);
+        Task StopConnectionAsync(CancellationToken cancellattionToken = default);
+        void OnNewMessage(Action<string> onMessageReceived);
+    }
 
+
+    public class Notification_ServiceSignalR : INotification_ServiceSignalR
+    {
+        private HubConnection hubConnection;
+        private readonly ISetting setting;
 
         public Notification_ServiceSignalR(ISetting setting)
         {
+            this.setting = setting;
+        }
 
-            var userId = Preferences.Get(nameof(Dto.Token_Dto_For_ShowInformation.Id), string.Empty);
-
+        public async Task StartConnectionAsync(string userId, CancellationToken cancellationToken = default)
+        {
 
             var url = $"{setting.BackendApiUrl}{Notification_EndPointNameSignalR.EndPointName}?userId={userId}";
 
-            hubConnection = new HubConnectionBuilder()
-                .WithUrl(url)
-                .WithAutomaticReconnect()
-                .Build();
+
+            this.hubConnection = new HubConnectionBuilder()
+                    .WithUrl(url)
+                    .WithAutomaticReconnect()
+                    .Build();
+
+
+            this.hubConnection.On<string>(Notification_EndPointNameSignalR.MethodName, message =>
+             {
+                 this._OnMessageReceived.Invoke(message);
+             });
+
+
+            await this.hubConnection.StartAsync(cancellationToken);
 
         }
 
-        public async Task StartConnectionAsync(CancellationToken cancellationToken = default)
-        {
-            if (hubConnection.State == HubConnectionState.Disconnected)
-            {
-                await hubConnection.StartAsync(cancellationToken);
-            }
-        }
+
 
         public async Task StopConnectionAsync(CancellationToken cancellationToken = default)
         {
-            if (hubConnection.State == HubConnectionState.Connected)
+            if (this.hubConnection != null && this.hubConnection.State == HubConnectionState.Connected)
             {
-                await hubConnection.StopAsync(cancellationToken);
+                await this.hubConnection.StopAsync(cancellationToken);
+                await this.hubConnection.DisposeAsync();
             }
         }
 
+        private Action<string> _OnMessageReceived;
+
         public void OnNewMessage(Action<string> onMessageReceived)
         {
-            hubConnection.On<string>(Notification_EndPointNameSignalR.MethodName, message =>
-               {
-                   onMessageReceived?.Invoke(message);
-               });
+            this._OnMessageReceived = onMessageReceived;
         }
+
+
+
+
     }
 }

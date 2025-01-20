@@ -3,6 +3,6 @@
     public static class Notification_EndPointNameSignalR
     {
         public static string EndPointName => "/signalR/notificacion";
-        public static string MethodName => "NewMessage";
+        public static string MethodName => "NewMessageForTheTutor";
     }
 }

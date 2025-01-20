@@ -3,10 +3,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Dto;
 using Dto.EndPointName;
+using FrontEndMovile.Service.SignalR;
 using FrontEndMovile.Util;
+using FrontEndMovile.View.User;
+using FrontEndMovile.View.Varios;
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
-using System.Text.Json;
+using System.Windows.Input;
 
 namespace FrontEndMovile.ViewModel
 {
@@ -18,7 +21,8 @@ namespace FrontEndMovile.ViewModel
         private readonly IConnectivity connectivity;
         private readonly HttpClient httpClient;
         private readonly ISetting setting;
-        private readonly AppShell appShell;
+        private readonly INotification_ServiceSignalR notification_ServiceSignalR;
+    
 
         #endregion
 
@@ -97,7 +101,7 @@ namespace FrontEndMovile.ViewModel
 
 
 
-    
+
         string _Password;
         public string Password
         {
@@ -114,7 +118,7 @@ namespace FrontEndMovile.ViewModel
                     this.Password_Error = "";
                 }
             }
-        }        
+        }
         string _Password_Error;
         public string Password_Error
         {
@@ -129,14 +133,28 @@ namespace FrontEndMovile.ViewModel
         #endregion
 
 
-        public Login_ViewModel(IConnectivity connectivity, HttpClient httpClient, ISetting setting, AppShell appShell)
+
+        public ICommand Cmd_Btn_PasswordRestore { get; }
+
+        private async void Cmd_Btn_PasswordRestore_Execute()
+        {
+            await Shell.Current.GoToAsync($"//{nameof(PasswordRestore_Page)}");
+        }
+
+        public Login_ViewModel(IConnectivity connectivity, HttpClient httpClient, ISetting setting,
+            AppShell appShell,
+            PasswordRestore_Page passwordRestore_Page,
+            INotification_ServiceSignalR notification_ServiceSignalR
+            )
         {
             this.connectivity = connectivity;
             this.httpClient = httpClient;
             this.setting = setting;
-            this.appShell = appShell;
+            this.notification_ServiceSignalR = notification_ServiceSignalR;
             this.connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
 
+
+            this.Cmd_Btn_PasswordRestore = new RelayCommand(Cmd_Btn_PasswordRestore_Execute);
 
 
             Task.Run(async () => await LoadAsync());
@@ -226,18 +244,23 @@ namespace FrontEndMovile.ViewModel
                         Preferences.Set(nameof(Token_Dto_For_ShowInformation.Name), token.Name);
                         Preferences.Set(nameof(Token_Dto_For_ShowInformation.Id), token.Id.ToString());
 
-                        //mostrando mensaje de bienvenida
-                        await Application.Current.MainPage.DisplayAlert("Success", $"Bienvenido: {token.Name}", "Ok");
+                       
 
                         //redireccionando a la pagina principal
-                        Application.Current.MainPage = this.appShell;
+
+                        await this.notification_ServiceSignalR.StartConnectionAsync(token.Id.ToString());
+
+                        AppShell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
+
+                        await Shell.Current.GoToAsync($"//{nameof(Wellcome_Page)}");
+
                     }
                 }
                 else
                 {
-                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    //   var errorMessage = await response.Content.ReadAsStringAsync();
 
-                    var dictionary = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(errorMessage);
+                    var dictionary = await response.Content.GetErrorDictionaryAsync();  // JsonSerializer.Deserialize<Dictionary<string, List<string>>>(errorMessage);
 
                     if (dictionary != null)
                     {
@@ -269,6 +292,7 @@ namespace FrontEndMovile.ViewModel
             }
 
         }
+
 
 
 

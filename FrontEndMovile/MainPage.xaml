@@ -3,31 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FrontEndMovile.MainPage">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-
-            <Label
-                Text="Bienvenido al demo de la futura aplicacion movil desarrollada en MAUI para el colegio "
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                x:Name="LblWellcome"
-                
-                />
-
-            <Label
-                Text="CEP Nuestra Señora del Perpetuo Socorro "
-                Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1"/>
-            <Image
-     Source="logo01.png"
-     HeightRequest="185"
-     Aspect="AspectFit"
-     SemanticProperties.Description="dot net bot in a hovercraft number nine" />
-
-
-        </VerticalStackLayout>
-    </ScrollView>
+ 
 
 </ContentPage>

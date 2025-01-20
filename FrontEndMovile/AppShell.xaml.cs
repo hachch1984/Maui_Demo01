@@ -1,5 +1,4 @@
-﻿using Dto;
-using FrontEndMovile.Service;
+﻿using FrontEndMovile.Service;
 using FrontEndMovile.Service.SignalR;
 using FrontEndMovile.View.User;
 
@@ -7,44 +6,50 @@ namespace FrontEndMovile
 {
     public partial class AppShell : Shell
     {
-
-        private readonly Notification_ServiceSignalR signalRClientService;
+        private readonly INotification_ServiceSignalR notification_ServiceSignalR;
         private readonly INotificationInThePhone_Service notificationInThePhone_Service;
-        public Login_Page Login_Page { get; set; }
 
-
-        public AppShell(Notification_ServiceSignalR signalRClientService, INotificationInThePhone_Service notification_Service)
+        public AppShell(AppShell_ViewModel appShell_ViewModel,
+            INotification_ServiceSignalR notification_ServiceSignalR,
+            INotificationInThePhone_Service notificationInThePhone_Service)
         {
             InitializeComponent();
 
-            this.signalRClientService = signalRClientService;
-            this.notificationInThePhone_Service = notification_Service;
+            BindingContext = appShell_ViewModel;
 
-
-            var user = Preferences.Get(nameof(Token_Dto_For_ShowInformation.Name), string.Empty);
-
-            this.LblUser.Text = user;
-
+            this.notification_ServiceSignalR = notification_ServiceSignalR;
+            this.notificationInThePhone_Service = notificationInThePhone_Service;
         }
+
+
 
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
 
-            // Iniciar la conexión
-            await signalRClientService.StartConnectionAsync();
+          
 
-            // Escuchar mensajes
-            this.signalRClientService.OnNewMessage(message =>
+
+
+            this.notification_ServiceSignalR.OnNewMessage(message =>
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
 
-                    this.notificationInThePhone_Service.ShowNotification("El cole says", message);
+                    this.notificationInThePhone_Service.ShowNotification("The school says", message);
 
                 });
             });
+
+
+            var accessToken = Preferences.Get("accesstoken", string.Empty);
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await Shell.Current.GoToAsync($"//{nameof(Login_Page)}");
+            }
+
         }
 
 
@@ -52,17 +57,9 @@ namespace FrontEndMovile
         {
             base.OnDisappearing();
 
-            // Detener la conexión
-            await signalRClientService.StopConnectionAsync();
+            await this.notification_ServiceSignalR.StopConnectionAsync();
         }
 
-        private void BnLogout_Clicked(object sender, EventArgs e)
-        {
-            // Clear preferences
-            Preferences.Clear();
-            this.Login_Page.Clear();
-            // Restart application
-            Application.Current.MainPage = this.Login_Page;
-        }
+
     }
 }

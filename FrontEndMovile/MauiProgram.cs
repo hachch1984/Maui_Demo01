@@ -42,7 +42,7 @@ namespace FrontEndMovile
 
 
             //signalR
-            builder.Services.AddSingleton<Notification_ServiceSignalR>();
+            builder.Services.AddSingleton<INotification_ServiceSignalR, Notification_ServiceSignalR>();
 
             // Registrar servicios específicos de Android
 #if ANDROID
@@ -69,6 +69,7 @@ namespace FrontEndMovile
             #region pages and viewmodels
 
             builder.Services.AddTransient<AppShell>();
+            builder.Services.AddTransient<AppShell_ViewModel>();
 
 
             builder.Services.AddTransient<Login_Page>();

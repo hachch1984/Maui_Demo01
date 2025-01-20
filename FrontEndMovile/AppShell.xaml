@@ -3,36 +3,43 @@
     x:Class="FrontEndMovile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:FrontEndMovile"
-    xmlns:views="clr-namespace:FrontEndMovile.View"
-    Shell.FlyoutBehavior="Flyout"
+    xmlns:local="clr-namespace:FrontEndMovile" 
+    
     xmlns:view_varios="clr-namespace:FrontEndMovile.View.Varios"
+    xmlns:view_user="clr-namespace:FrontEndMovile.View.User"
     xmlns:info="clr-namespace:Microsoft.Maui.ApplicationModel;assembly=Microsoft.Maui.Essentials"
-    Title="FrontEndMovile">
+    Title="FrontEndMovile"
+    Shell.FlyoutBehavior="Disabled"
+    
+    >
 
     <!---->
 
-    <!--<TabBar>
-        <Tab Title="Inicio" Icon="home.png">
-            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
-        </Tab>
-        <Tab Title="Notificaciones" Icon="notifications.png">
-            <ShellContent ContentTemplate="{DataTemplate views:NotificationPage}" />
-        </Tab>
-    </TabBar>-->
+
 
     <Shell.FlyoutHeader>
         <VerticalStackLayout>
             <HorizontalStackLayout Padding="10">
                 <Image Source="perfil.png" x:Name="Photo" WidthRequest="120" Margin="10"/>
-                <Label x:Name="LblUser" VerticalOptions="Center" Margin="10,0,0,0"/>
+                <Label Text="{Binding UserName}" VerticalOptions="Center" Margin="10,0,0,0"/>
             </HorizontalStackLayout>
             <BoxView HeightRequest="1" Color="Gray" Margin="5,10,5,10"/>
 
         </VerticalStackLayout>
     </Shell.FlyoutHeader>
 
-    <!-- Add a gray line here -->
+
+
+    <ShellContent Route="Login_Page" ContentTemplate="{DataTemplate view_user:Login_Page}"  FlyoutItemIsVisible="False"  />
+
+    <ShellContent Route="PasswordRestore_Page" ContentTemplate="{DataTemplate view_user:PasswordRestore_Page}"  FlyoutItemIsVisible="False" />
+
+
+
+    <ShellContent
+        Title="Wellcome"
+        ContentTemplate="{DataTemplate view_varios:Wellcome_Page}"
+        Route="Wellcome_Page" />
 
     <ShellContent
         Title="Home"
@@ -53,15 +60,24 @@
       x:Name="Menu_NotePage"
     />
 
+
+
+
+
+
     <Shell.FlyoutFooter>
         <VerticalStackLayout >
             <BoxView HeightRequest="1" Color="Gray" Margin="5,10,5,10"/>
 
             <Button Text="Logout" Margin="20" x:Name="BnLogout"
-                    Clicked="BnLogout_Clicked" />
+                    Command="{Binding BnLogout_ClickedCommand }" />
+
             <Label  Margin="20,0,20,0"  Text="{x:Static info:AppInfo.Name}" FontSize="Small" TextColor="{DynamicResource Secondary}"  HorizontalOptions="Center"/>
+
             <Label Margin="0,0,0,10"  Text="{x:Static info:AppInfo.VersionString}" FontSize="Small"  TextColor="{DynamicResource Secondary}"  HorizontalOptions="Center"/>
         </VerticalStackLayout>
     </Shell.FlyoutFooter>
+
+
 
 </Shell>

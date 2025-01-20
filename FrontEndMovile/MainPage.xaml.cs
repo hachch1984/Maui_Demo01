@@ -1,5 +1,4 @@
-﻿using Dto;
-using FrontEndMovile.Util;
+﻿using FrontEndMovile.Util;
 
 namespace FrontEndMovile
 {
@@ -12,10 +11,7 @@ namespace FrontEndMovile
             InitializeComponent();
        
 
-            var name= Preferences.Get(nameof(Token_Dto_For_ShowInformation.Name), string.Empty);    
-
-            this.LblWellcome.Text = $"Bienvenido usuario {name.ToUpper()} al demo de la futura aplicacion movil desarrollada en MAUI para el colegio";
-        }
+           }
 
      
     }

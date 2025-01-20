@@ -5,7 +5,9 @@
              xmlns:util="clr-namespace:FrontEndMovile.Util"
              xmlns:component="clr-namespace:FrontEndMovile.Util.GeneralComponent"   
             
-             Title="LoginPage">
+             Title=""
+             Shell.NavBarIsVisible="False"
+             >
 
 
     <VerticalStackLayout 
@@ -125,9 +127,12 @@
         <Label
             Text="Olvido su Contraseña"
             TextColor="{DynamicResource Secondary}"
-            HorizontalOptions="Center"
-           x:Name="ForgotPassword"
-            />
+            HorizontalOptions="Center"                        
+            >
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding Cmd_Btn_PasswordRestore}"/>
+            </Label.GestureRecognizers>
+        </Label>
 
     </VerticalStackLayout>
 </ContentPage>
