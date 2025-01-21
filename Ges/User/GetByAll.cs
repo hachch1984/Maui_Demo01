@@ -9,14 +9,11 @@ namespace Ges.User
 
 
 
-    public class GetAll : CmdBase, IRequest<GetAll>
+    public class GetAll : CmdBase_Result<List<Dto.Ges.User.ShowInformation01>>, IRequest<GetAll>
     {
 
 
-        public List<Dto.User_Dto_For_ShowInformation> Result { get; protected set; } = new List<Dto.User_Dto_For_ShowInformation>();
 
-        public GetAll()
-        { }
 
 
 
@@ -47,7 +44,7 @@ namespace Ges.User
                     request.Result = await dbContext.User
                         .OrderBy(x => x.Name)
                         .AsNoTracking()
-                        .Select(x => new Dto.User_Dto_For_ShowInformation { Id = x.Id, Name = x.Name, Email = x.Email })
+                        .Select(x => new Dto.Ges.User.ShowInformation01 { Id = x.Id, Name = x.Name, Email = x.Email })
                         .ToListAsync(cancellationToken);
 
                     return request;

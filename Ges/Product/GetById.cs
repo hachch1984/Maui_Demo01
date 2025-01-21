@@ -1,23 +1,15 @@
-﻿using DbEf;
-using Dto;
+﻿using DbEf; 
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ges.Product
 {
-    public class GetById : CmdBase, IRequest<GetById>
+    public class GetById : CmdBase_Data_Result<long, Dto.Ges.Product.ShowInformation01Prod>, IRequest<GetById>
     {
-        protected long Id { get; }
-
-        public Product_Dto_For_ShowInformation01? Result { get; protected set; }
-
-        public GetById(long id)
+        public GetById(long data) : base(data)
         {
-            Id = id;
         }
-
-
 
         public class Validator : AbstractValidator<GetById>
         {
@@ -26,11 +18,11 @@ namespace Ges.Product
                 RuleFor(x => x)
                     .Custom((value, context) =>
                     {
-                        var id = context.InstanceToValidate.Id;
+                        var id = context.InstanceToValidate.Data;
 
                         if (id <= 0)
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Id), "The name must be greater than 0");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "The name must be greater than 0");
                         }
                     });
 
@@ -54,17 +46,17 @@ namespace Ges.Product
                 {
 
                     request.Result = await dbContext.Product
-                        .Where(x => x.Id == request.Id)
+                        .Where(x => x.Id == request.Data)
                         .Include(x => x.Category)
                         .AsNoTracking()
-                       .Select(x => new Product_Dto_For_ShowInformation01
+                       .Select(x => new Dto.Ges.Product.ShowInformation01Prod
                        {
                            Id = x.Id,
                            Name = x.Name,
                            Price = x.Price,
                            Description = x.Description,
                            Active = x.Active,
-                           Category = new Category_Dto_For_ShowInformation01 { Id = x.Category.Id, Name = x.Category.Name }
+                           Category = new Dto.Ges.Category.ShowInformation1Cat { Id = x.Category.Id, Name = x.Category.Name }
 
                        })
                        .FirstOrDefaultAsync(cancellationToken);

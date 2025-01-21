@@ -1,6 +1,6 @@
-﻿namespace Dto
+﻿namespace Dto.Ges.User
 {
-    public class Token_Dto_For_ShowInformation
+    public class Token_Created
     {
         public long Id { get; set; }
         public string Email { get; set; }
@@ -9,13 +9,4 @@
         public DateTime Expiration { get; set; }
         public DateTime Creation { get; set; }
     }
-
-    public class Token_Dto_For_Create
-    {
-        public int UserDocumentTypeId { get; set; }
-        public string UserDocumentValue { get; set; }
-        public string Password { get; set; }
-    }
-
-
 }

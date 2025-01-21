@@ -7,16 +7,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Ges.Product
 {
 
-    public class Delete : CmdBase, IRequest<Delete>
+    public class Delete : CmdBase_Data<int>, IRequest<Delete>
     {
-        protected int Id { get; }
-
-        public Delete(int id)
+        public Delete(int data) : base(data)
         {
-            this.Id = id;
         }
-
-        protected bool Result { get; set; } = false;
 
         public class Validator : AbstractValidator<Delete>
         {
@@ -25,15 +20,15 @@ namespace Ges.Product
                 RuleFor(x => x)
                     .CustomAsync(async (value, context, cancellationToken) =>
                     {
-                        var id = context.InstanceToValidate.Id;
+                        var id = context.InstanceToValidate.Data;
 
                         if (id <= 0)
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Id), "Must be greater than 0");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "Must be greater than 0");
                         }
                         else if (await dbContext.Product.AsNoTracking().AnyAsync(x => x.Id == id, cancellationToken) == false)
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Id), "Not Found");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "Not Found");
                         } 
 
                     });
@@ -64,7 +59,7 @@ namespace Ges.Product
                     }
 
                     var rowCount = await dbContext.Product
-                            .Where(x => x.Id == request.Id)
+                            .Where(x => x.Id == request.Data)
                            .ExecuteDeleteAsync(cancellationToken);
 
                     await dbContext.SaveChangesAsync(cancellationToken);
@@ -74,7 +69,7 @@ namespace Ges.Product
                         await tran.CommitAsync(cancellationToken);
                     }
 
-                    request.Result = true;
+            
 
                     return request;
                 }

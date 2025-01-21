@@ -1,23 +1,15 @@
-﻿using DbEf;
-using Dto;
+﻿using DbEf; 
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ges.Category
 {
-    public class GetByName : CmdBase, IRequest<GetByName>
+    public class GetByName : CmdBase_Data_Result<string, List<Dto.Ges.Category.ShowInformation3Cat>>, IRequest<GetByName>
     {
-        protected string Name { get; }
-
-        public List<Category_Dto_For_ShowInformation03> Result { get; protected set; } = [];
-
-        public GetByName(string name)
+        public GetByName(string data) : base(data)
         {
-            Name = name;
         }
-
-
 
         public class Validator : AbstractValidator<GetByName>
         {
@@ -26,15 +18,15 @@ namespace Ges.Category
                 RuleFor(x => x)
                     .Custom((value, context) =>
                     {
-                        var name = context.InstanceToValidate.Name;
+                        var name = context.InstanceToValidate.Data;
 
                         if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Name), "Required");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "Required");
                         }
                         else if (name.Length < 3)
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Name), "The name must be at least 3 characters");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "The name must be at least 3 characters");
                         }
                     });
 
@@ -58,9 +50,9 @@ namespace Ges.Category
                 {
 
                     request.Result = await dbContext.Category
-                        .Where(x => EF.Functions.Like(x.Name, $"%{request.Name}%"))
+                        .Where(x => EF.Functions.Like(x.Name, $"%{request.Data}%"))
                         .AsNoTracking()
-                        .Select(x => new Category_Dto_For_ShowInformation03 { Id = x.Id, Name = x.Name, Description = x.Description, Active = x.Active })
+                        .Select(x => new Dto.Ges.Category.ShowInformation3Cat { Id = x.Id, Name = x.Name, Description = x.Description, Active = x.Active })
                         .ToListAsync(cancellationToken);
 
                     return request;

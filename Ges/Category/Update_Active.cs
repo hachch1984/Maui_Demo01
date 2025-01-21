@@ -8,17 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Ges.Category
 {
 
-    public class Update_Active : CmdBase, IRequest<Update_Active>
+    public class Update_Active : CmdBase_Data<Dto.Ges.Category.Update_ActiveCat>, IRequest<Update_Active>
     {
-        protected Dto.Category_Dto_For_Update_Active Dto { get; }
-
-        public Update_Active(Dto.Category_Dto_For_Update_Active dto)
+        public Update_Active(Dto.Ges.Category.Update_ActiveCat data) : base(data)
         {
-            this.Dto = dto;
         }
-
-        protected bool Result { get; set; } = false;
-
 
         public class Validator : AbstractValidator<Update_Active>
         {
@@ -27,7 +21,7 @@ namespace Ges.Category
                 RuleFor(x => x)
                     .CustomAsync(async (value, context, cancellationToken) =>
                     {
-                        var obj = context.InstanceToValidate.Dto;
+                        var obj = context.InstanceToValidate.Data;
 
                         if (obj.Id <= 0)
                         {
@@ -68,7 +62,7 @@ namespace Ges.Category
                         tran = await dbContext.Database.BeginTransactionAsync(cancellationToken);
                     }
 
-                    var obj = request.Dto;
+                    var obj = request.Data;
 
                     await dbContext.Category
                         .Where(x => x.Id == obj.Id)
@@ -84,7 +78,6 @@ namespace Ges.Category
                         await tran.CommitAsync(cancellationToken);
                     }
 
-                    request.Result = true;
 
                     return request;
                 }

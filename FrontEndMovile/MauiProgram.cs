@@ -1,5 +1,5 @@
-﻿using Dto;
-using Dto.EndPointName;
+﻿using Dto.EndPointName;
+using Dto.Ges.User;
 using FrontEndMovile.Service;
 using FrontEndMovile.Service.SignalR;
 using FrontEndMovile.Util;
@@ -155,7 +155,7 @@ namespace FrontEndMovile
                 }
 
                 // Configura el nuevo token en la solicitud si el token fue refrescado exitosamente
-                var token = Preferences.Get(nameof(Token_Dto_For_ShowInformation.Token), string.Empty);
+                var token = Preferences.Get(nameof(Token_Created.Token), string.Empty);
                 if (string.IsNullOrEmpty(token) == false)
                 {
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);

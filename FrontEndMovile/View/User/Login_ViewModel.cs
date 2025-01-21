@@ -1,8 +1,8 @@
 ﻿
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Dto;
 using Dto.EndPointName;
+using Dto.Ges.User;
 using FrontEndMovile.Service.SignalR;
 using FrontEndMovile.Util;
 using FrontEndMovile.View.User;
@@ -30,8 +30,8 @@ namespace FrontEndMovile.ViewModel
         #region observable properties
 
 
-        ObservableCollection<UserDocumentType_Dto_For_OnlyActives> _UserDocumentType_List = new ObservableCollection<UserDocumentType_Dto_For_OnlyActives>();
-        public ObservableCollection<UserDocumentType_Dto_For_OnlyActives> UserDocumentType_List
+        ObservableCollection<UserDocumentType_ShowInformation> _UserDocumentType_List = new ObservableCollection<UserDocumentType_ShowInformation>();
+        public ObservableCollection<UserDocumentType_ShowInformation> UserDocumentType_List
         {
             get
             {
@@ -43,8 +43,8 @@ namespace FrontEndMovile.ViewModel
                 OnPropertyChanged();
             }
         }
-        UserDocumentType_Dto_For_OnlyActives? _UserDocumentTypeId;
-        public UserDocumentType_Dto_For_OnlyActives? UserDocumentTypeId
+        UserDocumentType_ShowInformation? _UserDocumentTypeId;
+        public UserDocumentType_ShowInformation? UserDocumentTypeId
         {
             get { return _UserDocumentTypeId; }
             set
@@ -171,7 +171,7 @@ namespace FrontEndMovile.ViewModel
                 var url = $"{this.setting.BackendApiUrl}{UserDocumentType_EndPointName.EndPointName}{UserDocumentType_EndPointName.GetAllOnlyActive}";
 
 
-                var response = await this.httpClient.GetFromJsonAsync<List<UserDocumentType_Dto_For_OnlyActives>>(url);
+                var response = await this.httpClient.GetFromJsonAsync<List<UserDocumentType_ShowInformation>>(url);
 
                 if (response is not null)
                 {
@@ -223,7 +223,7 @@ namespace FrontEndMovile.ViewModel
                 //preparando la url
                 var url = $"{this.setting.BackendApiUrl}{User_EndPointName.EndPointName}{User_EndPointName.TokenCreation}";
 
-                var objJson = new Token_Dto_For_Create
+                var objJson = new Token_Creation
                 {
                     UserDocumentTypeId = this.UserDocumentTypeId == null ? 0 : this.UserDocumentTypeId.Id,
                     UserDocumentValue = this.UserDocumentValue,
@@ -234,15 +234,15 @@ namespace FrontEndMovile.ViewModel
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var token = await response.Content.ReadFromJsonAsync<Token_Dto_For_ShowInformation>();
+                    var token = await response.Content.ReadFromJsonAsync<Token_Created>();
                     if (token is not null)
                     {
                         //guardando informacion del token en el dispositivo
-                        Preferences.Set(nameof(Token_Dto_For_ShowInformation.Token), token.Token);
-                        Preferences.Set(nameof(Token_Dto_For_ShowInformation.Expiration), token.Expiration);
-                        Preferences.Set(nameof(Token_Dto_For_ShowInformation.Email), token.Email);
-                        Preferences.Set(nameof(Token_Dto_For_ShowInformation.Name), token.Name);
-                        Preferences.Set(nameof(Token_Dto_For_ShowInformation.Id), token.Id.ToString());
+                        Preferences.Set(nameof(Token_Created.Token), token.Token);
+                        Preferences.Set(nameof(Token_Created.Expiration), token.Expiration);
+                        Preferences.Set(nameof(Token_Created.Email), token.Email);
+                        Preferences.Set(nameof(Token_Created.Name), token.Name);
+                        Preferences.Set(nameof(Token_Created.Id), token.Id.ToString());
 
                        
 
@@ -266,15 +266,15 @@ namespace FrontEndMovile.ViewModel
                     {
                         foreach (var item in dictionary)
                         {
-                            if (item.Key == nameof(Token_Dto_For_Create.UserDocumentTypeId))
+                            if (item.Key == nameof(Token_Creation.UserDocumentTypeId))
                             {
                                 this.UserDocumentTypeId_Error = item.Value.FirstOrDefault();
                             }
-                            else if (item.Key == nameof(Token_Dto_For_Create.UserDocumentValue))
+                            else if (item.Key == nameof(Token_Creation.UserDocumentValue))
                             {
                                 this.UserDocumentValue_Error = item.Value.FirstOrDefault();
                             }
-                            else if (item.Key == nameof(Token_Dto_For_Create.Password))
+                            else if (item.Key == nameof(Token_Creation.Password))
                             {
                                 this.Password_Error = item.Value.FirstOrDefault();
                             }

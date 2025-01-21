@@ -8,17 +8,21 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Ges.Category
 {
 
-    public class Add : CmdBase, IRequest<Add>
+    public class Add : CmdBase_Data_Result<Dto.Ges.Category.AddCat,Model.Category>, IRequest<Add>
     {
-        protected Dto.Category_Dto_For_Add Dto { get; }
-
-
-        public Add(Dto.Category_Dto_For_Add dto)
+        public Add(Dto.Ges.Category.AddCat data) : base(data)
         {
-            this.Dto = dto;
         }
 
-        public Model.Category Result { get; protected set; } = null!;
+        //protected Dto.Category_Dto_For_Add Dto { get; }
+
+
+        //public Add(Dto.Category_Dto_For_Add dto)
+        //{
+        //    this.Dto = dto;
+        //}
+
+        //public Model.Category Result { get; protected set; } = null!;
 
 
         public class Validator : AbstractValidator<Add>
@@ -28,7 +32,7 @@ namespace Ges.Category
                 RuleFor(x => x)
                     .CustomAsync(async (value, context, cancellationToken) =>
                     {
-                        var obj = context.InstanceToValidate.Dto;
+                        var obj = context.InstanceToValidate.Data;
 
                         if (string.IsNullOrEmpty(obj.Description) || string.IsNullOrWhiteSpace(obj.Description))
                         {
@@ -71,7 +75,7 @@ namespace Ges.Category
                         tran = await dbContext.Database.BeginTransactionAsync(cancellationToken);
                     }
 
-                    var obj = this.mapper.Map<Model.Category>(request.Dto);
+                    var obj = this.mapper.Map<Model.Category>(request.Data);
 
                     await dbContext.Category.AddAsync(obj, cancellationToken);
 

@@ -1,25 +1,16 @@
 ﻿using DbEf;
-using Dto;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Ges.User
 {
 
-    public class PasswordRestore : CmdBase, IRequest<PasswordRestore>
+    public class PasswordRestore : CmdBase_Data<Dto.Ges.User.PasswordRestore>, IRequest<PasswordRestore>
     {
-        protected User_Dto_For_PasswordRestore Dto { get; }
-        public bool Result { get; protected set; } = false;
-        protected IConfiguration Configuration { get; }
-
-        public PasswordRestore(User_Dto_For_PasswordRestore dto)
+        public PasswordRestore(Dto.Ges.User.PasswordRestore data) : base(data)
         {
-            this.Dto = dto;
         }
-
-
 
         public class Validator : AbstractValidator<PasswordRestore>
         {
@@ -29,14 +20,14 @@ namespace Ges.User
                     .CustomAsync(async (value, context, cancellationToken) =>
                     {
 
-                        if (string.IsNullOrEmpty(context.InstanceToValidate.Dto.Email) || string.IsNullOrWhiteSpace(context.InstanceToValidate.Dto.Email))
+                        if (string.IsNullOrEmpty(context.InstanceToValidate.Data.Email) || string.IsNullOrWhiteSpace(context.InstanceToValidate.Data.Email))
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Dto.Email), "Required");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data.Email), "Required");
 
                         }
-                        else if (await dbContext.User.AsNoTracking().AnyAsync(x => x.Email == context.InstanceToValidate.Dto.Email, cancellationToken) == false)
+                        else if (await dbContext.User.AsNoTracking().AnyAsync(x => x.Email == context.InstanceToValidate.Data.Email, cancellationToken) == false)
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Dto.Email), "Not exists");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data.Email), "Not exists");
                         }
                     });
 
@@ -60,7 +51,6 @@ namespace Ges.User
                 {
                     //proceso de envio de correo electronico
 
-                    request.Result = true;
 
                     return request;
 

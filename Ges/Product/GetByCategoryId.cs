@@ -1,23 +1,15 @@
-﻿using DbEf;
-using Dto;
+﻿using DbEf; 
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ges.Product
 {
-    public class GetByCategoryId : CmdBase, IRequest<GetByCategoryId>
+    public class GetByCategoryId : CmdBase_Data_Result<int,List<Dto.Ges.Product.ShowInformation03Prod>>, IRequest<GetByCategoryId>
     {
-        protected int CategoryId { get; }
-
-        public List<Product_Dto_For_ShowInformation03> Result { get; protected set; } = [];
-
-        public GetByCategoryId(int categoryId)
+        public GetByCategoryId(int data) : base(data)
         {
-            CategoryId = categoryId;
         }
-
-
 
         public class Validator : AbstractValidator<GetByCategoryId>
         {
@@ -26,15 +18,15 @@ namespace Ges.Product
                 RuleFor(x => x)
                     .CustomAsync(async (value, context, CancellationToken) =>
                     {
-                        var id = context.InstanceToValidate.CategoryId;
+                        var id = context.InstanceToValidate.Data;
 
                         if (id <= 0)
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.CategoryId), "The name must be greater than 0");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "The name must be greater than 0");
                         }
                         else if (await dbContext.Category.AnyAsync(x => x.Id == id, CancellationToken) == false)
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.CategoryId), "Not Found");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "Not Found");
                         }
                     });
 
@@ -58,10 +50,10 @@ namespace Ges.Product
                 {
 
                     request.Result = await dbContext.Product
-                        .Where(x => x.CategoryId == request.CategoryId)
+                        .Where(x => x.CategoryId == request.Data)
                         .Include(x => x.Category)
                         .AsNoTracking()
-                       .Select(x => new Product_Dto_For_ShowInformation03
+                       .Select(x => new Dto.Ges.Product.ShowInformation03Prod
                        {
                            Id = x.Id,
                            Name = x.Name,

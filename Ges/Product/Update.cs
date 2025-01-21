@@ -8,17 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Ges.Product
 {
 
-    public class Update : CmdBase, IRequest<Update>
+    public class Update : CmdBase_Data<Dto.Ges.Product.UpdateProd>, IRequest<Update>
     {
-        protected Dto.Product_Dto_For_Update Dto { get; }
-
-        public Update(Dto.Product_Dto_For_Update dto)
+        public Update(Dto.Ges.Product.UpdateProd data) : base(data)
         {
-            this.Dto = dto;
         }
-
-        protected bool Result { get; set; } = false;
-
 
         public class Validator : AbstractValidator<Update>
         {
@@ -27,7 +21,7 @@ namespace Ges.Product
                 RuleFor(x => x)
                     .CustomAsync(async (value, context, cancellationToken) =>
                     {
-                        var obj = context.InstanceToValidate.Dto;
+                        var obj = context.InstanceToValidate.Data;
                         var idExists = true;
 
 
@@ -116,7 +110,7 @@ namespace Ges.Product
                     }
 
 
-                    var obj = this.mapper.Map<Model.Product>(request.Dto);
+                    var obj = this.mapper.Map<Model.Product>(request.Data);
 
                     dbContext.Product.Update(obj);
 
@@ -127,7 +121,6 @@ namespace Ges.Product
                         await tran.CommitAsync(cancellationToken);
                     }
 
-                    request.Result = true;
 
                     return request;
                 }

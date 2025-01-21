@@ -1,8 +1,6 @@
-﻿using Dto;
-using Dto.EndPointName;
+﻿using Dto.EndPointName;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Model.Util;
 
 namespace BackendApi.EndPoint
 {
@@ -12,7 +10,7 @@ namespace BackendApi.EndPoint
         public static RouteGroupBuilder Product_EndPoint_Map(this RouteGroupBuilder endpoints)
         {
             endpoints.MapGet(Product_EndPointName.GetById, GetById);
-            endpoints.MapGet(Product_EndPointName.GetAll, GetAll).RequireAuthorization(Authorization_CustomPolicy.IsUser);
+            endpoints.MapGet(Product_EndPointName.GetAll, GetAll);//.RequireAuthorization(Authorization_CustomPolicy.IsUser);
             endpoints.MapGet(Product_EndPointName.GetByCategoryId, GetByCategoryId);
             endpoints.MapGet(Product_EndPointName.GetByName, GetByName);
 
@@ -25,7 +23,7 @@ namespace BackendApi.EndPoint
             return endpoints;
         }
 
-        public static async Task<Results<Ok<Product_Dto_For_ShowInformation01>, BadRequest<Dictionary<string, string[]>>, NotFound, InternalServerError<string>>> GetById(
+        public static async Task<Results<Ok<Dto.Ges.Product.ShowInformation01Prod>, BadRequest<Dictionary<string, string[]>>, NotFound, InternalServerError<string>>> GetById(
             long id,
 
             IMediator mediator,
@@ -34,7 +32,8 @@ namespace BackendApi.EndPoint
         {
             try
             {
-                var cmd = new Ges.Product.GetById(id);
+                var cmd = new Ges.Product.GetById(id).Set_DataNickName(nameof(id));    
+                
                 await mediator.Send(cmd, cancellationToken);
                 if (cmd.HasErrors)
                 {
@@ -49,7 +48,7 @@ namespace BackendApi.EndPoint
             }
         }
 
-        public static async Task<Results<Ok<List<Product_Dto_For_ShowInformation03>>, InternalServerError<string>>> GetByCategoryId(
+        public static async Task<Results<Ok<List<Dto.Ges.Product.ShowInformation03Prod>>, InternalServerError<string>>> GetByCategoryId(
             int categoryId,
 
             IMediator mediator,
@@ -58,7 +57,8 @@ namespace BackendApi.EndPoint
         {
             try
             {
-                var cmd = new Ges.Product.GetByCategoryId(categoryId);
+                var cmd = new Ges.Product.GetByCategoryId(categoryId).Set_DataNickName(nameof(categoryId));
+                
                 await mediator.Send(cmd, cancellationToken);
                 return TypedResults.Ok(cmd.Result);
             }
@@ -70,7 +70,7 @@ namespace BackendApi.EndPoint
         }
 
 
-        public static async Task<Results<Ok<List<Product_Dto_For_ShowInformation01>>, InternalServerError<string>>> GetAll(
+        public static async Task<Results<Ok<List<Dto.Ges.Product.ShowInformation01Prod>>, InternalServerError<string>>> GetAll(
             IMediator mediator,
             CancellationToken cancellationToken = default
             )
@@ -88,7 +88,7 @@ namespace BackendApi.EndPoint
             }
         }
 
-        public static async Task<Results<Ok<List<Product_Dto_For_ShowInformation01>>, InternalServerError<string>>> GetByName(
+        public static async Task<Results<Ok<List<Dto.Ges.Product.ShowInformation01Prod>>, InternalServerError<string>>> GetByName(
             string name,
 
            IMediator mediator,
@@ -97,8 +97,10 @@ namespace BackendApi.EndPoint
         {
             try
             {
-                var cmd = new Ges.Product.GetByName(name);
+                var cmd = new Ges.Product.GetByName(name).Set_DataNickName(nameof(name));
+                
                 await mediator.Send(cmd, cancellationToken);
+
                 return TypedResults.Ok(cmd.Result);
             }
             catch (Exception ex)
@@ -110,7 +112,7 @@ namespace BackendApi.EndPoint
 
 
         public static async Task<Results<Created<long>, BadRequest<Dictionary<string, string[]>>, InternalServerError<string>>> Add(
-           Product_Dto_For_Add dto,
+           Dto.Ges.Product.AddProd dto,
 
            IMediator mediator,
            CancellationToken cancellationToken = default
@@ -139,7 +141,7 @@ namespace BackendApi.EndPoint
 
 
         public static async Task<Results<Ok, BadRequest<Dictionary<string, string[]>>, InternalServerError<string>>> Update(
-           Product_Dto_For_Update dto,
+           Dto.Ges.Product.UpdateProd dto,
 
            IMediator mediator,
            CancellationToken cancellationToken = default
@@ -162,7 +164,7 @@ namespace BackendApi.EndPoint
         }
 
         public static async Task<Results<Ok, BadRequest<Dictionary<string, string[]>>, InternalServerError<string>>> Update_Active(
-          Product_Dto_For_Update_Active dto,
+          Dto.Ges.Product.Update_ActiveProd dto,
 
           IMediator mediator,
           CancellationToken cancellationToken = default
@@ -184,7 +186,7 @@ namespace BackendApi.EndPoint
             }
         }
         public static async Task<Results<Ok, BadRequest<Dictionary<string, string[]>>, InternalServerError<string>>> Update_Price(
-          Product_Dto_For_Update_Price dto,
+          Dto.Ges.Product.Update_PriceProd dto,
 
           IMediator mediator,
           CancellationToken cancellationToken = default
@@ -214,7 +216,8 @@ namespace BackendApi.EndPoint
         {
             try
             {
-                var cmd = new Ges.Product.Delete(id);
+                var cmd = new Ges.Product.Delete(id).Set_DataNickName(nameof(id));
+                
                 await mediator.Send(cmd, cancellationToken);
                 if (cmd.HasErrors)
                 {

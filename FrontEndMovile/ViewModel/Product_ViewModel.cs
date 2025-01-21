@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Dto;
+using Dto.Ges.Product;
 using System.Collections.ObjectModel;
 
 namespace FrontEndMovile.ViewModel
@@ -7,7 +7,7 @@ namespace FrontEndMovile.ViewModel
     public partial class Product_ViewModel : ObservableObject
     {
         [ObservableProperty]
-        ObservableCollection<Product_Dto_For_ShowInformation01> products;
+        ObservableCollection<ShowInformation01Prod> products;
 
         private readonly IConnectivity connectivity;
         public Product_ViewModel(IConnectivity connectivity)

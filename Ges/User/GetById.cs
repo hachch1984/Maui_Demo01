@@ -1,4 +1,4 @@
-﻿using DbEf;
+﻿using DbEf; 
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,17 +9,11 @@ namespace Ges.User
 
 
 
-    public class GetById : CmdBase, IRequest<GetById>
+    public class GetById : CmdBase_Data_Result<int, Dto.Ges.User.ShowInformation01>, IRequest<GetById>
     {
-        protected int Id { get; }
-        public Dto.User_Dto_For_ShowInformation? Result { get; protected set; } = default!;
-
-        public GetById(int id)
+        public GetById(int data) : base(data)
         {
-            Id = id;
         }
-
-
 
         public class Validator : AbstractValidator<GetById>
         {
@@ -28,11 +22,11 @@ namespace Ges.User
                 RuleFor(x => x)
                     .Custom((value, context) =>
                     {
-                        var id = context.InstanceToValidate.Id;
+                        var id = context.InstanceToValidate.Data;
 
                         if (id <= 0)
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Id), "The name must be greater than 0");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "The name must be greater than 0");
                         }
                     });
 
@@ -56,9 +50,9 @@ namespace Ges.User
                 {
 
                     request.Result = await dbContext.User
-                        .Where(x => x.Id == request.Id)
+                        .Where(x => x.Id == request.Data)
                         .AsNoTracking()
-                        .Select(x => new Dto.User_Dto_For_ShowInformation { Id = x.Id, Name = x.Name, Email = x.Email })
+                        .Select(x => new Dto.Ges.User.ShowInformation01 { Id = x.Id, Name = x.Name, Email = x.Email })
                         .FirstOrDefaultAsync(cancellationToken);
 
                     return request;

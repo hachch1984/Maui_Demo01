@@ -1,23 +1,15 @@
-﻿using DbEf;
-using Dto;
+﻿using DbEf; 
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ges.Product
 {
-    public class GetByName : CmdBase, IRequest<GetByName>
+    public class GetByName : CmdBase_Data_Result<string, List<Dto.Ges.Product.ShowInformation01Prod>>, IRequest<GetByName>
     {
-        protected string Name { get; }
-
-        public List<Product_Dto_For_ShowInformation01> Result { get; protected set; } = [];
-
-        public GetByName(string name)
+        public GetByName(string data) : base(data)
         {
-            Name = name;
         }
-
-
 
         public class Validator : AbstractValidator<GetByName>
         {
@@ -26,15 +18,15 @@ namespace Ges.Product
                 RuleFor(x => x)
                     .Custom((value, context) =>
                     {
-                        var name = context.InstanceToValidate.Name;
+                        var name = context.InstanceToValidate.Data;
 
                         if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Name), "Required");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "Required");
                         }
                         else if (name.Length < 3)
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Name), "The name must be at least 3 characters");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "The name must be at least 3 characters");
                         }
                     });
 
@@ -58,16 +50,16 @@ namespace Ges.Product
                 {
 
                     request.Result = await dbContext.Product
-                        .Where(x => EF.Functions.Like(x.Name, $"%{request.Name}%"))
+                        .Where(x => EF.Functions.Like(x.Name, $"%{request.Data}%"))
                         .AsNoTracking()
-                         .Select(x => new Product_Dto_For_ShowInformation01
+                         .Select(x => new Dto.Ges.Product.ShowInformation01Prod
                          {
                              Id = x.Id,
                              Name = x.Name,
                              Price = x.Price,
                              Description = x.Description,
                              Active = x.Active,
-                             Category = new Category_Dto_For_ShowInformation01 { Id = x.Category.Id, Name = x.Category.Name }
+                             Category = new Dto.Ges.Category.ShowInformation1Cat { Id = x.Category.Id, Name = x.Category.Name }
 
                          })
                          .OrderBy(x => x.Category.Name)

@@ -1,4 +1,4 @@
-using Dto;
+using Dto.Ges.User;
 
 namespace FrontEndMovile.View.Varios;
 
@@ -16,7 +16,7 @@ public partial class Wellcome_Page : ContentPage
         base.OnAppearing();
 
 
-        var name = Preferences.Get(nameof(Token_Dto_For_ShowInformation.Name), string.Empty);
+        var name = Preferences.Get(nameof(Token_Created.Name), string.Empty);
 
         this.LblWellcome.Text = $"Bienvenido usuario {name.ToUpper()} al demo de la futura aplicacion movil desarrollada en MAUI para el colegio";
 

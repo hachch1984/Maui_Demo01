@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Dto.EndPointName;
-using Dto;
 using System.Net.Http.Json;
 using FrontEndMovile.Util;
+using Dto.Ges.User;
 
 namespace FrontEndMovile.View.User
 {
@@ -66,7 +66,7 @@ namespace FrontEndMovile.View.User
                 //preparando la url
                 var url = $"{this.setting.BackendApiUrl}{User_EndPointName.EndPointName}{User_EndPointName.PasswordRestore}";
 
-                var objJson = new User_Dto_For_PasswordRestore
+                var objJson = new PasswordRestore
                 {
                     Email = this.Email
                 };
@@ -84,7 +84,7 @@ namespace FrontEndMovile.View.User
 
                     foreach (var item in await response.Content.GetErrorDictionaryAsync())
                     {
-                        if (item.Key == nameof(Dto.User_Dto_For_PasswordRestore.Email))
+                        if (item.Key == nameof(PasswordRestore.Email))
                         {
                             this.Email_Error = item.Value.FirstOrDefault();
                         }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DbEf;
-using Dto;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,18 +7,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Ges.Product
 {
-    public class Add : CmdBase, IRequest<Add>
+    public class Add : CmdBase_Data_Result<Dto.Ges.Product.AddProd,Model.Product>, IRequest<Add>
     {
-
-        protected Product_Dto_For_Add Dto { get; }
-
-        public Model.Product? Result { get; set; } = null!;
-
-        public Add(Product_Dto_For_Add dto)
+        public Add(Dto.Ges.Product.AddProd data) : base(data)
         {
-            this.Dto = dto;
         }
-
 
         public class Validator : AbstractValidator<Add>
         {
@@ -28,7 +20,7 @@ namespace Ges.Product
                 RuleFor(x => x)
                     .CustomAsync(async (value, context, cancellationToken) =>
                     {
-                        var obj = context.InstanceToValidate.Dto;
+                        var obj = context.InstanceToValidate.Data;
 
 
                         if (string.IsNullOrEmpty(obj.Name) || string.IsNullOrWhiteSpace(obj.Name))
@@ -101,7 +93,7 @@ namespace Ges.Product
                         tran = await dbContext.Database.BeginTransactionAsync(cancellationToken);
                     }
 
-                    var obj = this.mapper.Map<Model.Product>(request.Dto);
+                    var obj = this.mapper.Map<Model.Product>(request.Data);
 
                     await dbContext.Product.AddAsync(obj, cancellationToken);
 

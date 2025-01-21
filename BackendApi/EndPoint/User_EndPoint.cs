@@ -1,5 +1,4 @@
-﻿using Dto;
-using Dto.EndPointName;
+﻿using Dto.EndPointName;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -35,7 +34,7 @@ namespace BackendApi.EndPoint
 
 
         private static async Task<Results<InternalServerError<string>, Ok, NotFound, BadRequest<Dictionary<string, string[]>>>> PasswordRestore(
-        User_Dto_For_PasswordRestore dto,
+        Dto.Ges.User.PasswordRestore dto,
 
         IMediator mediator,
         CancellationToken cancellationToken = default
@@ -65,7 +64,7 @@ namespace BackendApi.EndPoint
 
         //-----------------------------------------------------------------------------------------------------
 
-        private static async Task<Results<InternalServerError<string>, Ok<User_Dto_For_ShowInformation>, NotFound, BadRequest<Dictionary<string, string[]>>>> GetById(
+        private static async Task<Results<InternalServerError<string>, Ok<Dto.Ges.User.ShowInformation01>, NotFound, BadRequest<Dictionary<string, string[]>>>> GetById(
             int id,
 
             IMediator mediator,
@@ -74,8 +73,8 @@ namespace BackendApi.EndPoint
         {
             try
             {
-                var cmd = new Ges.User.GetById(id);
-
+                var cmd = new Ges.User.GetById(id).Set_DataNickName(nameof(id));
+                
                 await mediator.Send(cmd, cancellationToken);
 
                 if (cmd.HasErrors)
@@ -94,7 +93,7 @@ namespace BackendApi.EndPoint
 
         }
 
-        private static async Task<Results<InternalServerError<string>, Ok<List<User_Dto_For_ShowInformation>>>> GetAll(
+        private static async Task<Results<InternalServerError<string>, Ok<List<Dto.Ges.User.ShowInformation01>>>> GetAll(
             IMediator mediator,
             CancellationToken cancellationToken = default
             )
@@ -118,8 +117,8 @@ namespace BackendApi.EndPoint
         //-----------------------------------------------------------------------------------------------------
 
 
-        private static async Task<Results<Ok<Token_Dto_For_ShowInformation>, InternalServerError<string>, BadRequest<Dictionary<string, string[]>>>> TokenCreation(
-            Token_Dto_For_Create dto,
+        private static async Task<Results<Ok<Dto.Ges.User.Token_Created>, InternalServerError<string>, BadRequest<Dictionary<string, string[]>>>> TokenCreation(
+            Dto.Ges.User.Token_Creation dto,
 
             IConfiguration configuration,
             IMediator mediator,

@@ -1,4 +1,4 @@
-﻿using Dto;
+﻿
 using Dto.EndPointName;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -55,17 +55,17 @@ namespace BackendApi.EndPoint
         }
 
 
-      
 
 
 
 
-        public static async 
+
+        public static async
             Task<
             Results<
-                Ok<Category_Dto_For_ShowInformation03>,
-                BadRequest<Dictionary<string, string[]>>, 
-                NotFound, 
+                Ok<Dto.Ges.Category.ShowInformation3Cat>,
+                BadRequest<Dictionary<string, string[]>>,
+                NotFound,
                 InternalServerError<string>
                 >
             > GetById(
@@ -77,8 +77,8 @@ namespace BackendApi.EndPoint
             )
         {
             try
-            { 
-                var cmd = new Ges.Category.GetById(id);
+            {
+                var cmd = new Ges.Category.GetById(id).Set_DataNickName(nameof(id));
                 await mediator.Send(cmd, cancellationToken);
                 if (cmd.HasErrors)
                 {
@@ -93,7 +93,7 @@ namespace BackendApi.EndPoint
             }
         }
 
-        public static async Task<Results<Ok<List<Category_Dto_For_ShowInformation03>>, InternalServerError<string>>> GetAll(
+        public static async Task<Results<Ok<List<Dto.Ges.Category.ShowInformation3Cat>>, InternalServerError<string>>> GetAll(
             IMediator mediator,
             CancellationToken cancellationToken = default
             )
@@ -113,11 +113,11 @@ namespace BackendApi.EndPoint
 
         public static async Task<
             Results<
-                Created<int>, 
+                Created<int>,
                 BadRequest<Dictionary<string, string[]>>,
                 InternalServerError<string>
                 >> Add(
-            Category_Dto_For_Add dto,
+            Dto.Ges.Category.AddCat dto,
 
             IOutputCacheStore outputCacheStore,
             IMediator mediator,
@@ -134,7 +134,7 @@ namespace BackendApi.EndPoint
                 }
 
 
-                await Cache_Refresh(outputCacheStore,cancellationToken);//refresh cache
+                await Cache_Refresh(outputCacheStore, cancellationToken);//refresh cache
 
                 var url = $"{Category_EndPointName.EndPointName}{Category_EndPointName.GetById}?id={cmd.Result.Id}";
 
@@ -149,7 +149,7 @@ namespace BackendApi.EndPoint
         }
 
         public static async Task<Results<Ok, BadRequest<Dictionary<string, string[]>>, InternalServerError<string>>> Update(
-            Category_Dto_For_Update dto,
+            Dto.Ges.Category.UpdateCat dto,
 
             IOutputCacheStore outputCacheStore,
             IMediator mediator,
@@ -175,7 +175,7 @@ namespace BackendApi.EndPoint
             }
         }
         public static async Task<Results<Ok, BadRequest<Dictionary<string, string[]>>, InternalServerError<string>>> Update_Active(
-        Category_Dto_For_Update_Active dto,
+        Dto.Ges.Category.Update_ActiveCat dto,
 
         IMediator mediator,
         IOutputCacheStore outputCacheStore,
@@ -201,27 +201,27 @@ namespace BackendApi.EndPoint
             }
         }
 
-      
+
 
 
         public static async Task<Results<Ok, BadRequest<Dictionary<string, string[]>>, InternalServerError<string>>> Delete(
             int id,
 
             IMediator mediator,
-            IOutputCacheStore   outputCacheStore,
+            IOutputCacheStore outputCacheStore,
             CancellationToken cancellationToken = default
             )
         {
             try
             {
-                var cmd = new Ges.Category.Delete(id);
+                var cmd = new Ges.Category.Delete(id).Set_DataNickName(nameof(id));
                 await mediator.Send(cmd, cancellationToken);
                 if (cmd.HasErrors)
                 {
                     return TypedResults.BadRequest(cmd.Errors);
                 }
 
-                await Cache_Refresh(outputCacheStore,cancellationToken);//refresh cache
+                await Cache_Refresh(outputCacheStore, cancellationToken);//refresh cache
 
                 return TypedResults.Ok();
             }

@@ -1,6 +1,5 @@
 ﻿using DbEf;
-using Dto;
-using FluentValidation;
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,21 +8,9 @@ namespace Ges.Category
 
 
 
-    public class GetAll : CmdBase, IRequest<GetAll>
+    public class GetAll : CmdBase_Result<List<Dto.Ges.Category.ShowInformation3Cat>>, IRequest<GetAll>
     {
-        public List<Category_Dto_For_ShowInformation03> Result { get; protected set; } = [];
-
-        public GetAll()
-        {
-        }
-
-        public class Validator : AbstractValidator<GetAll>
-        {
-            public Validator(ApplicationDbContext dbContext)
-            {
-
-            }
-        }
+      
 
 
 
@@ -43,7 +30,7 @@ namespace Ges.Category
                     request.Result = await dbContext.Category
                      .AsNoTracking()
                      .Select(x =>
-                     new Category_Dto_For_ShowInformation03
+                     new Dto.Ges.Category.ShowInformation3Cat
                      {
                          Id = x.Id,
                          Name = x.Name,

@@ -7,17 +7,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Ges.Product
 {
 
-    public class Update_Price : CmdBase, IRequest<Update_Price>
+    public class Update_Price : CmdBase_Data<Dto.Ges.Product.Update_PriceProd>, IRequest<Update_Price>
     {
-        protected Dto.Product_Dto_For_Update_Price Dto { get; }
-
-        public Update_Price(Dto.Product_Dto_For_Update_Price dto)
+        public Update_Price(Dto.Ges.Product.Update_PriceProd data) : base(data)
         {
-            this.Dto = dto;
         }
-
-        protected bool Result { get; set; } = false;
-
 
         public class Validator : AbstractValidator<Update_Price>
         {
@@ -26,7 +20,7 @@ namespace Ges.Product
                 RuleFor(x => x)
                     .CustomAsync(async (value, context, cancellationToken) =>
                     {
-                        var obj = context.InstanceToValidate.Dto;
+                        var obj = context.InstanceToValidate.Data;
 
                         if (obj.Id <= 0)
                         {
@@ -69,7 +63,7 @@ namespace Ges.Product
                         tran = await dbContext.Database.BeginTransactionAsync(cancellationToken);
                     }
 
-                    var obj = request.Dto;
+                    var obj = request.Data;
 
                     await dbContext.Product
                         .Where(x => x.Id == obj.Id)
@@ -84,7 +78,6 @@ namespace Ges.Product
                         await tran.CommitAsync(cancellationToken);
                     }
 
-                    request.Result = true;
 
                     return request;
                 }

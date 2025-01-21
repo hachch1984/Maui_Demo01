@@ -1,18 +1,13 @@
 ﻿using DbEf;
-using Dto;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ges.Product
 {
-    public class GetAll : CmdBase, IRequest<GetAll>
+    public class GetAll : CmdBase_Result<List<Dto.Ges.Product.ShowInformation01Prod>>, IRequest<GetAll>
     {
-        public List<Product_Dto_For_ShowInformation01> Result { get; protected set; } = [];
-
-        public GetAll()
-        {
-        }
+       
 
         public class Validator : AbstractValidator<GetAll>
         {
@@ -41,14 +36,14 @@ namespace Ges.Product
                     request.Result = await dbContext.Product
                         .Include(x => x.Category)
                         .AsNoTracking()
-                        .Select(x => new Product_Dto_For_ShowInformation01
+                        .Select(x => new Dto.Ges.Product.ShowInformation01Prod
                         {
                             Id = x.Id,
                             Name = x.Name,
                             Price = x.Price,
                             Description = x.Description,
                             Active = x.Active,
-                            Category = new Category_Dto_For_ShowInformation01 { Id = x.Category.Id, Name = x.Category.Name }
+                            Category = new Dto.Ges.Category.ShowInformation1Cat{ Id = x.Category.Id, Name = x.Category.Name }
 
                         })
                         .OrderBy(x => x.Category.Name)

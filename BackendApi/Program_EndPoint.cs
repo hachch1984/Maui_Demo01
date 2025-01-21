@@ -2,6 +2,7 @@
 using Dto.EndPointName;
 using Dto.EndPointName.SignalR;
 
+
 namespace BackendApi
 {
     public static class Program_EndPoint
@@ -22,7 +23,7 @@ namespace BackendApi
 
 
 
-            app.MapGroup(Product_EndPointName.EndPointName).Product_EndPoint_Map().RequireAuthorization();
+            app.MapGroup(Product_EndPointName.EndPointName).Product_EndPoint_Map();//.RequireAuthorization();
 
 
 

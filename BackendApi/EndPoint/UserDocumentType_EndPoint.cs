@@ -1,5 +1,5 @@
-﻿using Dto;
-using Dto.EndPointName;
+﻿using Dto.EndPointName;
+ 
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -20,7 +20,7 @@ namespace BackendApi.EndPoint
         //-----------------------------------------------------------------------------------------------------
 
      
-        private static async Task<Results<InternalServerError<string>, Ok<List<UserDocumentType_Dto_For_OnlyActives>>>> GetAllOnlyActive(
+        private static async Task<Results<InternalServerError<string>, Ok<List<Dto.Ges.User.UserDocumentType_ShowInformation>>>> GetAllOnlyActive(
             IMediator mediator,
             CancellationToken cancellationToken = default
             )

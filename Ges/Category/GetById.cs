@@ -1,23 +1,15 @@
-﻿using DbEf;
-using Dto;
+﻿using DbEf; 
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ges.Category
 {
-    public class GetById : CmdBase, IRequest<GetById>
+    public class GetById : CmdBase_Data_Result<int, Dto.Ges.Category.ShowInformation3Cat>, IRequest<GetById>
     {
-        protected int Id { get; }
-
-        public Category_Dto_For_ShowInformation03? Result { get; protected set; }
-
-        public GetById(int id)
+        public GetById(int data) : base(data)
         {
-            Id = id;
         }
-
-
 
         public class Validator : AbstractValidator<GetById>
         {
@@ -26,15 +18,15 @@ namespace Ges.Category
                 RuleFor(x => x)
                     .Custom((value, context) =>
                     {
-                        var id = context.InstanceToValidate.Id;
+                        var id = context.InstanceToValidate.Data;
 
                         if (id <= 0)
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Id), "The name must be greater than 0");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "The name must be greater than 0");
                         }
                         else if (!dbContext.Category.Any(x => x.Id == id))
                         {
-                            context.AddFailure(nameof(context.InstanceToValidate.Id), "Not exist");
+                            context.AddFailure(nameof(context.InstanceToValidate.Data), "Not exist");
                         }
                     });
 
@@ -58,9 +50,9 @@ namespace Ges.Category
                 {
 
                     request.Result = await dbContext.Category
-                        .Where(x => x.Id == request.Id)
+                        .Where(x => x.Id == request.Data)
                         .AsNoTracking()
-                        .Select(x => new Category_Dto_For_ShowInformation03 { Id = x.Id, Name = x.Name, Description = x.Description, Active = x.Active })
+                        .Select(x => new Dto.Ges.Category.ShowInformation3Cat { Id = x.Id, Name = x.Name, Description = x.Description, Active = x.Active })
                         .FirstOrDefaultAsync(cancellationToken);
 
                     return request;
