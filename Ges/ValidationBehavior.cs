@@ -17,6 +17,7 @@ namespace Ges
     {
         public Dictionary<string, string[]> Errors { get; set; } = [];
         public bool HasErrors => Errors.Count > 0;
+     //   public T Result { get; protected set; } = default;
     }
 
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>

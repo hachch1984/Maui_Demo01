@@ -77,7 +77,7 @@ namespace FrontEndMovile.View.User
                 {
                     await Application.Current.MainPage.DisplayAlert("Information", $"favor de revisar su email ({this.Email}), se envio un link para resetear su contraseña", "Ok");
 
-                    await Shell.Current.GoToAsync($"//{nameof(Login_Page)}");
+                    await Shell.Current.GoToAsync($"//{nameof(Login_Page)}", true);
                 }
                 else
                 {

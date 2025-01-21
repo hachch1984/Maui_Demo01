@@ -18,7 +18,7 @@ namespace FrontEndMovile
         {
             Preferences.Clear();
             Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
-            await Shell.Current.GoToAsync($"//{ nameof(  Login_Page)}");
+            await Shell.Current.GoToAsync($"//{ nameof(  Login_Page)}", true);
         }
 
 

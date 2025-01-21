@@ -138,7 +138,7 @@ namespace FrontEndMovile.ViewModel
 
         private async void Cmd_Btn_PasswordRestore_Execute()
         {
-            await Shell.Current.GoToAsync($"//{nameof(PasswordRestore_Page)}");
+            await Shell.Current.GoToAsync($"//{nameof(PasswordRestore_Page)}", true);
         }
 
         public Login_ViewModel(IConnectivity connectivity, HttpClient httpClient, ISetting setting,
@@ -252,7 +252,7 @@ namespace FrontEndMovile.ViewModel
 
                         AppShell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
 
-                        await Shell.Current.GoToAsync($"//{nameof(Wellcome_Page)}");
+                        await Shell.Current.GoToAsync($"//{nameof(Wellcome_Page)}", true);
 
                     }
                 }

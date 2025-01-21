@@ -47,7 +47,7 @@ namespace FrontEndMovile
 
             if (string.IsNullOrEmpty(accessToken))
             {
-                await Shell.Current.GoToAsync($"//{nameof(Login_Page)}");
+                await Shell.Current.GoToAsync($"//{nameof(Login_Page)}",true);
             }
 
         }
