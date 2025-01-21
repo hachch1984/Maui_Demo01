@@ -19,10 +19,10 @@ namespace FrontEndMovile.ViewModel
     {
         #region private properties
         private readonly IConnectivity connectivity;
-        private readonly HttpClient httpClient;
+        private readonly IHttpClientFactory httpClientFactory;
         private readonly ISetting setting;
         private readonly INotification_ServiceSignalR notification_ServiceSignalR;
-    
+
 
         #endregion
 
@@ -141,14 +141,14 @@ namespace FrontEndMovile.ViewModel
             await Shell.Current.GoToAsync($"//{nameof(PasswordRestore_Page)}", true);
         }
 
-        public Login_ViewModel(IConnectivity connectivity, HttpClient httpClient, ISetting setting,
+        public Login_ViewModel(IConnectivity connectivity, IHttpClientFactory httpClientFactory, ISetting setting,
             AppShell appShell,
             PasswordRestore_Page passwordRestore_Page,
             INotification_ServiceSignalR notification_ServiceSignalR
             )
         {
             this.connectivity = connectivity;
-            this.httpClient = httpClient;
+            this.httpClientFactory = httpClientFactory;
             this.setting = setting;
             this.notification_ServiceSignalR = notification_ServiceSignalR;
             this.connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
@@ -170,8 +170,9 @@ namespace FrontEndMovile.ViewModel
 
                 var url = $"{this.setting.BackendApiUrl}{UserDocumentType_EndPointName.EndPointName}{UserDocumentType_EndPointName.GetAllOnlyActive}";
 
+                using var httpClient = this.httpClientFactory.CreateAuthorizedClient();
 
-                var response = await this.httpClient.GetFromJsonAsync<List<UserDocumentType_ShowInformation>>(url);
+                var response = await httpClient.GetFromJsonAsync<List<UserDocumentType_ShowInformation>>(url);
 
                 if (response is not null)
                 {
@@ -230,7 +231,8 @@ namespace FrontEndMovile.ViewModel
                     Password = this.Password
                 };
 
-                var response = await this.httpClient.PostAsJsonAsync(url, objJson);
+                using var httpClient = this.httpClientFactory.CreateAuthorizedClient();
+                var response = await httpClient.PostAsJsonAsync(url, objJson);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -238,17 +240,19 @@ namespace FrontEndMovile.ViewModel
                     if (token is not null)
                     {
                         //guardando informacion del token en el dispositivo
-                        Preferences.Set(nameof(Token_Created.Token), token.Token);
-                        Preferences.Set(nameof(Token_Created.Expiration), token.Expiration);
-                        Preferences.Set(nameof(Token_Created.Email), token.Email);
-                        Preferences.Set(nameof(Token_Created.Name), token.Name);
-                        Preferences.Set(nameof(Token_Created.Id), token.Id.ToString());
+                        //Preferences.Set(nameof(Token_Created.Token), token.Token);
+                        //Preferences.Set(nameof(Token_Created.Expiration), token.Expiration);
+                        //Preferences.Set(nameof(Token_Created.Email), token.Email);
+                        //Preferences.Set(nameof(Token_Created.Name), token.Name);
+                        //Preferences.Set(nameof(Token_Created.Id), token.Id.ToString());
 
-                       
+                        await SecureStorage.SetAsync(nameof(Token_Created.Token), token.Token);
+                        await SecureStorage.SetAsync(nameof(Token_Created.Id), token.Id.ToString());
+
 
                         //redireccionando a la pagina principal
 
-                        await this.notification_ServiceSignalR.StartConnectionAsync(token.Id.ToString());
+                        await this.notification_ServiceSignalR.StartConnectionAsync(token.Token, token.Id.ToString());
 
                         AppShell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
 

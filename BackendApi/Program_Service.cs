@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Model.Util;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace BackendApi
@@ -19,7 +20,7 @@ namespace BackendApi
     {
         public static void Configure(WebApplicationBuilder builder)
         {
-          
+
 
             //json, configuracion de ignore cycles
             builder.Services.Configure<JsonOptions>(options =>
@@ -39,13 +40,13 @@ namespace BackendApi
             });
 
 
-         
+
 
             //entity framework
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 var dataBaseConnection = builder.Configuration.GetConnectionString("DefaultConnection");
-                options.UseSqlServer(dataBaseConnection,b => b.MigrationsAssembly("BackendApi"));
+                options.UseSqlServer(dataBaseConnection, b => b.MigrationsAssembly("BackendApi"));
             });
 
 
@@ -121,12 +122,29 @@ namespace BackendApi
 
                     opciones.TokenValidationParameters = new TokenValidationParameters
                     {
+
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = key,
                         ClockSkew = TimeSpan.Zero,
+
+
+                        ////ValidateIssuer = false,
+                        ////ValidateAudience = false,
+                        ////ValidateLifetime = true,
+                        ////ValidateIssuerSigningKey = true,
+
+
+                        //////ValidateIssuer = true,
+                        //////ValidIssuer = builder.Configuration["JWT:Issuer"],
+                        //////ValidateAudience = true,
+                        //////ValidAudience = builder.Configuration["JWT:Audience"],
+                        //////ValidateIssuerSigningKey = true,
+
+                        ////IssuerSigningKey = key,
+                        ////ClockSkew = TimeSpan.Zero,
                     };
                 });
             //token policies
@@ -140,7 +158,11 @@ namespace BackendApi
 
 
             //signalR
-            builder.Services.AddSignalR();
+            builder.Services.AddSignalR(hubOptions =>
+                {
+                    hubOptions.EnableDetailedErrors = true;
+                }
+             );
 
             builder.Services.AddHostedService<NotificationBackground_Service>();
 

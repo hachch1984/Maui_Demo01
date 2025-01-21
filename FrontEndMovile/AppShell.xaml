@@ -9,7 +9,6 @@
     xmlns:view_user="clr-namespace:FrontEndMovile.View.User"
     xmlns:info="clr-namespace:Microsoft.Maui.ApplicationModel;assembly=Microsoft.Maui.Essentials"
     Title="FrontEndMovile"
-    Shell.FlyoutBehavior="Disabled"
     
     >
 

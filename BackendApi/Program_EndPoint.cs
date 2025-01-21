@@ -23,14 +23,14 @@ namespace BackendApi
 
 
 
-            app.MapGroup(Product_EndPointName.EndPointName).Product_EndPoint_Map();//.RequireAuthorization();
+            app.MapGroup(Product_EndPointName.EndPointName).Product_EndPoint_Map().RequireAuthorization();
 
 
 
 
             #region SignalR
 
-            app.MapHub<Notification_EndPoint>(Notification_EndPointNameSignalR.EndPointName);
+            app.MapHub<Notification_EndPoint>(Notification_EndPointNameSignalR.EndPointName).RequireAuthorization();
 
             #endregion
 

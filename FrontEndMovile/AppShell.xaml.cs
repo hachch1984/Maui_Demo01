@@ -1,6 +1,8 @@
-﻿using FrontEndMovile.Service;
+﻿using Dto.Ges.User;
+using FrontEndMovile.Service;
 using FrontEndMovile.Service.SignalR;
 using FrontEndMovile.View.User;
+using FrontEndMovile.View.Varios;
 
 namespace FrontEndMovile
 {
@@ -19,16 +21,10 @@ namespace FrontEndMovile
 
             this.notification_ServiceSignalR = notification_ServiceSignalR;
             this.notificationInThePhone_Service = notificationInThePhone_Service;
-        }
 
 
 
 
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-
-          
 
 
 
@@ -42,12 +38,46 @@ namespace FrontEndMovile
                 });
             });
 
+            Task.Factory.StartNew(async () =>
+             {
 
-            var accessToken = Preferences.Get("accesstoken", string.Empty);
 
-            if (string.IsNullOrEmpty(accessToken))
+
+
+
+
+              
+
+
+
+             });
+
+        }
+
+
+
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+
+            var token = await SecureStorage.GetAsync(nameof(Token_Created.Token));
+            var userId = await SecureStorage.GetAsync(nameof(Token_Created.Id));
+
+
+
+            if (string.IsNullOrEmpty(token) == false && HttpClientAuthHandler.IsTokenExpired(token) == false)
             {
-                await Shell.Current.GoToAsync($"//{nameof(Login_Page)}",true);
+
+                await this.notification_ServiceSignalR.StartConnectionAsync(token, userId);
+                AppShell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
+                await Shell.Current.GoToAsync($"//{nameof(Wellcome_Page)}", true);
+            }
+            else
+            {
+                AppShell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
+                await Shell.Current.GoToAsync($"//{nameof(Login_Page)}", true);
             }
 
         }

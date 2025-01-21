@@ -9,10 +9,11 @@ namespace FrontEndMovile.View.User
 {
     public partial class PasswordRestore_ViewModel : ObservableObject
     {
-
-        private readonly HttpClient httpClient;
+        private readonly IHttpClientFactory httpClientFactory;
         private readonly IConnectivity connectivity;
         private readonly ISetting setting;
+
+
         string _Email;
         public string Email
         {
@@ -38,9 +39,10 @@ namespace FrontEndMovile.View.User
 
 
 
-        public PasswordRestore_ViewModel(HttpClient httpClient, IConnectivity connectivity, ISetting setting)
+        public PasswordRestore_ViewModel(IHttpClientFactory httpClientFactory, IConnectivity connectivity, ISetting setting)
         {
-            this.httpClient = httpClient;
+            ;
+            this.httpClientFactory = httpClientFactory;
             this.connectivity = connectivity;
             this.setting = setting;
 
@@ -71,7 +73,8 @@ namespace FrontEndMovile.View.User
                     Email = this.Email
                 };
 
-                var response = await this.httpClient.PostAsJsonAsync(url, objJson);
+                using var httpClient = this.httpClientFactory.CreateAuthorizedClient();
+                var response = await httpClient.PostAsJsonAsync(url, objJson);
 
                 if (response.IsSuccessStatusCode)
                 {
